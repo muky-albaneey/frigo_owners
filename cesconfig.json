@@ -1,0 +1,39 @@
+{
+  "cesVersion": "2.12.1",
+  "projectName": "frigo_owners",
+  "packages": [
+    {
+      "name": "expo-router",
+      "type": "navigation",
+      "options": {
+        "type": "drawer + tabs"
+      }
+    },
+    {
+      "name": "stylesheet",
+      "type": "styling"
+    },
+    {
+      "name": "zustand",
+      "type": "state-management"
+    }
+  ],
+  "flags": {
+    "noGit": false,
+    "noInstall": false,
+    "overwrite": false,
+    "importAlias": true,
+    "packageManager": "npm",
+    "eas": false
+  },
+  "packageManager": {
+    "type": "npm",
+    "version": "10.8.3"
+  },
+  "os": {
+    "type": "Darwin",
+    "platform": "darwin",
+    "arch": "x64",
+    "kernelVersion": "22.6.0"
+  }
+}
