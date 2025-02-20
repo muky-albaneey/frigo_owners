@@ -8,32 +8,26 @@ import { Ionicons } from '@expo/vector-icons';
 
 // import CartScreen from '~/components/home/CartScreen';
 
-import BothHomePage from '~/components/home/BothHomme';
-import { COLORS } from '~/components/home/Color';
-import HomePageUser from '~/components/home/HomePageUser';
-import HomePageTailor from '~/components/home/HomePageTailor';
-import ProfileScreen from '~/components/profile/Profile';
+import BothHomePage from '~/components/home/BothHome';
 import CartScreen from '~/components/home/CartScreen';
-import WalletScreen from '~/components/wallet/WalletPage';
-import ProducerHomepage from '~/components/home/producer/HomeProducder';
+import { COLORS } from '~/components/home/Color';
+import HomePageTailor from '~/components/home/HomePageTailor';
+import HomePageUser from '~/components/home/HomePageUser';
 import ProducerDashboard from '~/components/home/producer/Dashboard';
+import ProducerHomepage from '~/components/home/producer/HomeProducder';
+import ProfileScreen from '~/components/profile/Profile';
+import WalletScreen from '~/components/wallet/WalletPage';
 
-// import WalletScreen from '~/components/wallet/WalletPage';
-// import WishlistScreen from '~/components/home/WishList';
-// import ProfileScreen from '~/components/profile/Profile';
-// Screens
-const HomeScreen = () => <View style={styles.screen}><Text>Home</Text></View>;
-const CartScreens = () => <View style={styles.screen}><Text>Cart</Text></View>;
-const WishlistScreen = () => <View style={styles.screen}><Text>Wishlist</Text></View>;
-const WalletScreens = () => <View style={styles.screen}><Text>Wallet</Text></View>;
-// const ProfileScreen = () => <View style={styles.screen}><Text>Profile</Text></View>;
+
 
 const Tab = createBottomTabNavigator();
 
 
 export default function TabLayout() {
   const rotation = useSharedValue(0);
-  const status = 'dealer'
+
+  const status = 'both';
+const profile = 'owner';
 
   const getHomeComponent = () => {
     switch (status) {
@@ -45,6 +39,19 @@ export default function TabLayout() {
           return HomePageUser;
       default:
         return HomePageUser;
+    }
+  };
+
+  const getProfile = () => {
+    switch (profile) {
+      case "producer":
+        return ProducerDashboard;
+      case "owner":
+        return ProfileScreen;
+      case "tailor":
+          return ProfileScreen;
+      default:
+        return ProfileScreen;
     }
   };
   // Star animation: create a rotating effect
@@ -102,7 +109,7 @@ export default function TabLayout() {
       
       <Tab.Screen
         name="producers"
-        component={ProducerDashboard}
+        component={ProducerHomepage}
         options={{
     tabBarButton: (props) => (
       <TouchableOpacity {...props} style={styles.circleButton}>
@@ -130,7 +137,7 @@ export default function TabLayout() {
       {/* Profile Tab */}
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={getProfile()}
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={24} color={color} />,
         }}

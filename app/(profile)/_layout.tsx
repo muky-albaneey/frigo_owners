@@ -19,7 +19,7 @@ export default function Layout() {
       <Stack.Screen name="support"  options={{ headerShown: false }} />
       <Stack.Screen name="(order-history)"  options={{ headerShown: false }} />
       <Stack.Screen name="notification"  options={{ headerShown: false }} />
-      <Stack.Screen name="dashboaard"  options={{ headerShown: false }} />
+      <Stack.Screen name="dashboard"  options={{ headerShown: false }} />
      
     </Stack>
   );

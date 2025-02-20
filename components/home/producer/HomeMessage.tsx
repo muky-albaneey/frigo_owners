@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, Pressable } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { Feather } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 const messageData = [
   {
@@ -50,13 +52,14 @@ const ProducersMessages = () => {
       {/* Header Section */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.welcomeText}>Welcome</Text>
-          <Text style={styles.brandName}>Daviva Wears</Text>
-        </View>
         <Image
-          source={{ uri: "https://yourcdn.com/viva_logo.png" }}
+          source={{ uri: "https://randomuser.me/api/portraits/men/1.jpg" }}
           style={styles.brandLogo}
         />
+          {/* <Text style={styles.welcomeText}>Welcome</Text>
+          <Text style={styles.brandName}>Daviva Wears</Text> */}
+        </View>
+      
            <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Feather name="menu" size={24} color="black" />
                 </TouchableOpacity>
@@ -69,6 +72,8 @@ const ProducersMessages = () => {
         keyExtractor={(item) => item.id}
         estimatedItemSize={60}
         renderItem={({ item }) => (
+         <Link href='' asChild>
+          <Pressable>
           <View style={styles.messageCard}>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
             <View>
@@ -76,6 +81,8 @@ const ProducersMessages = () => {
               <Text style={styles.messageText}>{item.message}</Text>
             </View>
           </View>
+          </Pressable>
+         </Link>
         )}
       />
 
@@ -135,6 +142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
+    marginTop:-60
   },
   header: {
     flexDirection: "row",

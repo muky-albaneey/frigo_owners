@@ -3,7 +3,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Stack, useRouter} from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HeaderButton } from '~/components/HeaderButton';
+
 // import { useNavigation } from '@react-navigation/native';
 
 export const unstable_settings = {
@@ -34,6 +34,9 @@ export default function RootLayout() {
              }}
 />
         <Stack.Screen name="(producer)"  options={{ headerShown: false  }} />
+        <Stack.Screen name="(wallet)"  options={{ headerShown: false  }} />
+        <Stack.Screen name="(profile)"  options={{ headerShown: false  }} />
+        {/* <Stack.Screen name="(profile)"  options={{ headerShown: false  }} /> */}
       </Stack>
     </GestureHandlerRootView>
   );

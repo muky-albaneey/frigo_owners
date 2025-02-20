@@ -1,233 +1,230 @@
-/* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Pressable, Modal, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { Link, useRouter } from 'expo-router';
+  /* eslint-disable prettier/prettier */
+  import React, { useState } from "react";
+  import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Alert } from "react-native";
+  import * as ImagePicker from "expo-image-picker";
+  import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+  import { Link, useRouter } from "expo-router";
 
-export default function EditProfile() {
-  const [profileImage, setProfileImage] = useState<string | null>('https://via.placeholder.com/150');
-  const [genderModalVisible, setGenderModalVisible] = useState(false);
-  const [selectedGender, setSelectedGender] = useState('Female');
-  const router = useRouter();
+  const OwnerProfile = () => {
+    const router = useRouter();
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission Denied', 'We need access to your photos to upload an image.');
-      return;
-    }
+    const [profileImage, setProfileImage] = useState("https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg");
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    const pickImage = async () => {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permissionResult.granted === false) {
+        Alert.alert("Permission Denied", "You need to enable permissions to access images.");
+        return;
+      }
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
-  };
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-  const genders = ['Male', 'Female', 'Other'];
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+      }
+    };
 
-  const handleGenderSelection = (gender: string) => {
-    setSelectedGender(gender);
-    setGenderModalVisible(false);
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => router.replace("/(drawer)/(home)")}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
-      </View>
-
-      <View style={styles.profileImageContainer}>
-        <Image
-          source={{ uri: profileImage || 'https://via.placeholder.com/150' }}
-          style={styles.profileImage}
-        />
-        <TouchableOpacity style={styles.cameraIconContainer} onPress={pickImage}>
-          <Ionicons name="camera-outline" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.infoContainer}>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Full Name</Text>
-          <Text style={styles.value}>Jane Doe</Text>
+    return (
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+           <TouchableOpacity onPress={()=>router.back()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Drew Enterprise</Text>
         </View>
 
-        <Link href="/(drawer)/(profile)/(edit)/phone" asChild>
-          <Pressable>
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>Mobile Number</Text>
-              <Text style={styles.value}>+234 800 000 0000</Text>
+        {/* Profile Picture */}
+        <View style={styles.profileImageContainer}>
+          <TouchableOpacity onPress={pickImage}>
+            <Image source={{ uri: profileImage }} style={styles.profileImage} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Merchant Information */}
+        <View style={styles.infoCard}>
+          <Text style={styles.infoText}>
+            We specialize in bespoke tailoring for both men's and women's fashion, focusing on traditional African designs and custom Ankara creations.
+          </Text>
+          <TouchableOpacity style={styles.editButton}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Scrollable Sections */}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Working Hours */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Working Hours</Text>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <FontAwesome name="clock-o" size={20} color="black" />
+                <Text style={styles.rowText}>10:00 am - 6:00 pm</Text>
+              </View>
+            <Link href='/(drawer)/(profile)/(edit)/time' asChild>
+            <TouchableOpacity>
+                <MaterialIcons name="edit" size={20} color="black" />
+              </TouchableOpacity>
+            </Link>
             </View>
-          </Pressable>
-        </Link>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Address</Text>
-          <Text style={styles.value}>Lagos, Nigeria</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>janedoe@gmail.com</Text>
-        </View>
-
-        {/* Gender Field */}
-        <Pressable onPress={() => setGenderModalVisible(true)}>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Gender</Text>
-            <Text style={styles.value}>{selectedGender}</Text>
           </View>
-        </Pressable>
 
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Wallet ID</Text>
-          <Text style={styles.value}>1234567289</Text>
-        </View>
+          {/* Contact Information */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Contact Information</Text>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <MaterialIcons name="email" size={20} color="black" />
+                <Text style={styles.rowText}>mariokando@gmail.com</Text>
+              </View>
+              <Link href='/(drawer)/(profile)/(edit)/address'>
+              <MaterialIcons name="edit" size={20} color="black" />
+              </Link>
+            
+            </View>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <FontAwesome name="phone" size={20} color="black" />
+                <Text style={styles.rowText}>+1 (415) 505-0100</Text>
+              </View>
+              <Link href='/(drawer)/(profile)/(edit)/address'>
+              <MaterialIcons name="edit" size={20} color="black" />
+              </Link>
+              
+            </View>
+          </View>
 
-        <TouchableOpacity style={styles.actionRow}>
-          <Text style={styles.actionText}>Change Password</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
-        </TouchableOpacity>
+          {/* Social Media */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Social Media</Text>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <FontAwesome name="twitter" size={20} color="black" />
+                <Text style={styles.rowText}>@mariokando</Text>
+              </View>
+              <Link href='/(drawer)/(profile)/(edit)/social'>
+                <MaterialIcons name="edit" size={20} color="black" />
+              </Link>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <FontAwesome name="instagram" size={20} color="black" />
+                <Text style={styles.rowText}>@mariokando</Text>
+              </View>
+              <Link href='/(drawer)/(profile)/(edit)/social'>
+                <MaterialIcons name="edit" size={20} color="black" />
+              </Link>
+              
+            </View>
+          </View>
+        </ScrollView>
 
-        <TouchableOpacity style={styles.actionRow}>
-          <Text style={styles.actionText}>Change Transaction PIN</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
+        {/* Save Button */}
+        <TouchableOpacity style={styles.saveButton}>
+          <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
       </View>
+    );
+  };
 
-      {/* Gender Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={genderModalVisible}
-        onRequestClose={() => setGenderModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Gender</Text>
-            <FlatList
-              data={genders}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <View>
-                  <TouchableOpacity onPress={() => handleGenderSelection(item)}>
-                    <Text style={styles.modalItem}>{item}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}              
-            />
-          </View>
-        </View>
-      </Modal>
-    </View>
-  );
-}
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#F5F5F5",
+      padding: 16,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 16,
+    },
+    headerText: {
+      fontSize: 18,
+      fontWeight: "600",
+      marginLeft: 12,
+    },
+    profileImageContainer: {
+      alignItems: "center",
+      marginBottom: 16,
+    },
+    profileImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+    },
+    infoCard: {
+      backgroundColor: "#FFFFFF",
+      padding: 16,
+      borderRadius: 8,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 2,
+      elevation: 2,
+      marginBottom: 16,
+    },
+    infoText: {
+      color: "#555",
+    },
+    editButton: {
+      backgroundColor: "#7c4d34",
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderRadius: 6,
+      alignSelf: "flex-start",
+      marginTop: 8,
+    },
+    editButtonText: {
+      color: "white",
+      fontSize: 14,
+    },
+    section: {
+      marginBottom: 16,
+    },
+    sectionTitle: {
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#FFFFFF",
+      padding: 12,
+      borderRadius: 6,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 2,
+      elevation: 2,
+      marginBottom: 8,
+    },
+    rowLeft: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    rowText: {
+      marginLeft: 8,
+      color: "#555",
+    },
+    saveButton: {
+      backgroundColor: "#7c4d34",
+      paddingVertical: 12,
+      borderRadius: 8,
+      marginTop: 16,
+      alignItems: "center",
+    },
+    saveButtonText: {
+      color: "white",
+      fontSize: 16,
+      fontWeight: "600",
+    },
+  });
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  profileImageContainer: {
-    alignSelf: 'center',
-    marginTop: 20,
-    position: 'relative',
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  cameraIconContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'black',
-    borderRadius: 15,
-    padding: 5,
-  },
-  infoContainer: {
-    marginTop: 20,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  label: {
-    color: 'gray',
-  },
-  value: {
-    fontWeight: 'bold',
-  },
-  actionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 15,
-  },
-  actionText: {
-    color: 'black',
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center',     // Center horizontally
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Add transparent background overlay
-  },
-  
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5, // Shadow for Android
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4, // Shadow for iOS
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20, // Add spacing below the title
-    textAlign: 'center', // Center the title text
-    color: 'black',
-  },
-  
-  modalItem: {
-    fontSize: 16,
-    paddingVertical: 15, // Add vertical padding for better touch area
-    textAlign: 'center', // Center-align the text
-    color: 'black',
-    borderBottomWidth: 1, // Add a subtle separator
-    borderBottomColor: '#ddd', // Light gray color for separator
-  },
-  
-  
-});
+  export default OwnerProfile;

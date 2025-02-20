@@ -14,13 +14,15 @@ export default function Layout() {
         },
       }}
       >
-      {/* Optionally configure static options outside the route.*/}
+      {/* Optionally configure static options outside address the route.*/}
       {/* checkout_delivered */}
       <Stack.Screen name="index" options={{headerShown:false}} />
-      <Stack.Screen name="cancelled" options={{headerShown:false}} />
-      <Stack.Screen name="complete" options={{headerShown:false}} />
-      <Stack.Screen name="pending" options={{headerShown:false}} />
-      <Stack.Screen name="review"  options={{ headerShown: false }} />
+      <Stack.Screen name="address" options={{headerShown:false}} />
+      <Stack.Screen name="social" options={{headerShown:false}} />
+      <Stack.Screen name="time" options={{headerShown:false}} />
+      {/* <Stack.Screen name="address" options={{headerShown:false}} /> */}
+
+
     </Stack>
   );
 }

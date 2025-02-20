@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { Link, useRouter } from 'expo-router';
+import { Link, useRouter, useLocalSearchParams } from 'expo-router';
+
 export default function AddProduct() {
   const [images, setImages] = useState([]);
-
+  const { id } = useLocalSearchParams();
+  
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -32,8 +34,6 @@ export default function AddProduct() {
         <Pressable onPress={()=>route.back()}>
         <Ionicons name="arrow-back" size={24} color="black" style={styles.backIcon} />
         </Pressable>
-      
-      
       </View>
       <Text style={styles.subtitle}>Upload images of your new product.</Text>
       <Text style={styles.uploadLabel}>Upload Image</Text>

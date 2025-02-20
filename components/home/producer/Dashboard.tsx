@@ -20,11 +20,27 @@ import {
   Grid,
 } from "react-native-svg-charts";
 import * as shape from "d3-shape";
-import { Svg } from "react-native-svg";
+import { Line, Svg } from "react-native-svg";
 import { Feather } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
 const salesData = [5000, 15000, 3000, 12000, 8000, 18000];
+
+// Custom Grid Component
+const CustomGrid = ({ y, ticks }: { y: (value: number) => number; ticks: number[] }) => (
+  <>
+    {ticks.map((tick) => (
+      <Line
+        key={tick}
+        x1="0%"
+        x2="100%"
+        y1={y(tick)}
+        y2={y(tick)}
+        stroke="rgba(0,0,0,0.2)"
+      />
+    ))}
+  </>
+);
 
 const messageData = [
   {
@@ -121,7 +137,7 @@ const ProducerDashboard = () => {
             svg={{ fontSize: 10, fill: "black" }}
           />
           <View style={{ flex: 1, marginLeft: 10 }}>
-            <BarChart
+            {/* <BarChart
               style={{ height: 200 }}
               data={salesData}
               svg={{ fill: "#7c4d34" }}
@@ -129,7 +145,19 @@ const ProducerDashboard = () => {
               spacingInner={0.2}
             >
               <Grid />
+            </BarChart> */}
+            <BarChart
+              style={{ height: 200 }}
+              data={salesData}
+              svg={{ fill: "#7c4d34" }}
+              contentInset={{ top: 10, bottom: 10 }}
+              spacingInner={0.2}
+            >
+              {/* Replace Grid with a Custom Grid */}
+
+             <CustomGrid y={(value) => value} ticks={[5000, 10000, 15000, 20000]} />
             </BarChart>
+
             <XAxis
               style={{ marginTop: 10 }}
               data={salesData}

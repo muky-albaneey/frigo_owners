@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,9 +21,12 @@ export default function SuccessProd() {
  
      </Link>
 
+      
+      <Link href='/(drawer)/(product)/cov_list' asChild>
       <TouchableOpacity style={styles.secondaryButton}>
         <Text style={styles.secondaryButtonText}>Back to Product list</Text>
       </TouchableOpacity>
+     </Link>
     </View>
   );
 }

@@ -1,375 +1,104 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-
-const COLORS = {
-  primary: '#964B00',
-  background: '#fff',
-  textGray: '#666',
-  borderGray: '#ccc',
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet,Pressable } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+const ordersData = {
+  pending: [
+    { id: "1", name: "Customer Name - #1234", service: "Services Requested - wear Adjustment" },
+    { id: "2", name: "Customer Name - #1234", service: "Services Requested - wear Adjustment" },
+    { id: "3", name: "Customer Name - #1234", service: "Services Requested - wear Adjustment" },
+  ],
+  inProgress: [
+    { id: "1", name: "Wedding Suit", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "70% Complete" },
+    { id: "2", name: "Wedding Suit", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "70% Complete" },
+    { id: "3", name: "Wedding Suit", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "70% Complete" },
+  ],
+  completed: [
+    { id: "1", name: "Wedding Suit", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "100% Complete" },
+    { id: "2", name: "Evening Dress", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "100% Complete" },
+    { id: "3", name: "School Uniform", client: "Steven Sunday", dueDate: "Jan 25, 2025", progress: "100% Complete" },
+  ],
 };
 
 const OrderHistory = () => {
-  const [activeTab, setActiveTab] = useState('All');
-
-  const tabs = ['All', 'Pending', 'Completed', 'Cancelled'];
-
-  const orders = [
-    {
-      id: '1',
-      title: 'House of wear limited',
-      subtitle: 'Ankara (5yards)',
-      color: 'Blue',
-      size: 'Small',
-      price: 'NGN 12,800.56',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: true,
-      isPending: false,
-      isComplete: false,
-    },
-    {
-      id: '2',
-      title: 'Elegant Designs Ltd',
-      subtitle: 'Lace Material',
-      color: 'Red',
-      size: 'Medium',
-      price: 'NGN 15,000.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: true,
-      isComplete: false,
-    },
-    {
-      id: '3',
-      title: 'Modern Styles',
-      subtitle: 'Cotton T-Shirts',
-      color: 'Black',
-      size: 'Large',
-      price: 'NGN 5,600.75',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: false,
-      isComplete: true,
-    },
-    {
-      id: '4',
-      title: 'Trendy Hub',
-      subtitle: 'Denim Jacket',
-      color: 'Blue',
-      size: 'Medium',
-      price: 'NGN 20,000.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: true,
-      isPending: false,
-      isComplete: false,
-    },
-    {
-      id: '5',
-      title: 'Fashion World',
-      subtitle: 'Leather Bag',
-      color: 'Brown',
-      size: 'One Size',
-      price: 'NGN 35,500.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: true,
-      isComplete: false,
-    },
-    {
-      id: '6',
-      title: 'Casual Vibes',
-      subtitle: 'Sneakers',
-      color: 'White',
-      size: '42',
-      price: 'NGN 18,700.50',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: false,
-      isComplete: true,
-    },
-    {
-      id: '7',
-      title: 'Classic Looks',
-      subtitle: 'Suit Set',
-      color: 'Grey',
-      size: 'XL',
-      price: 'NGN 50,000.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: true,
-      isPending: false,
-      isComplete: false,
-    },
-    {
-      id: '8',
-      title: 'Urban Wear',
-      subtitle: 'Graphic Hoodie',
-      color: 'Green',
-      size: 'Large',
-      price: 'NGN 22,800.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: true,
-      isComplete: false,
-    },
-    {
-      id: '9',
-      title: 'Street Style',
-      subtitle: 'Cargo Pants',
-      color: 'Khaki',
-      size: 'M',
-      price: 'NGN 14,300.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: false,
-      isComplete: true,
-    },
-    {
-      id: '10',
-      title: 'Premium Wear',
-      subtitle: 'Formal Shirt',
-      color: 'White',
-      size: 'L',
-      price: 'NGN 9,800.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: true,
-      isComplete: false,
-    },
-     {
-      id: '11',
-      title: 'House of wear limited',
-      subtitle: 'Ankara (5yards)',
-      color: 'Blue',
-      size: 'Small',
-      price: 'NGN 12,800.56',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: true,
-      isPending: false,
-      isComplete: false,
-    },
-    {
-      id: '12',
-      title: 'House of wear limited',
-      subtitle: 'Ankara (5yards)',
-      color: 'Red',
-      size: 'Medium',
-      price: 'NGN 10,000.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: true,
-      isComplete: false,
-    },
-    {
-      id: '13',
-      title: 'House of wear limited',
-      subtitle: 'Ankara (5yards)',
-      color: 'Green',
-      size: 'Large',
-      price: 'NGN 15,000.00',
-      image: 'https://via.placeholder.com/100',
-      status: {
-        Pending: 'Waiting to be shipped',
-        Completed: 'Leave Review',
-        Cancelled: 'Re order',
-      },
-      isCancelled: false,
-      isPending: false,
-      isComplete: true,
-    },
-    
-    ];
-  
-   
-
-  const router = useRouter();
-
-  const recommendedItems = [
-    {
-      id: 'r1',
-      title: 'Ankara',
-      price: 'NGN 12,000 (1 yard)',
-      image: 'https://via.placeholder.com/100',
-    },
-    {
-      id: 'r2',
-      title: 'Ankara',
-      price: 'NGN 12,000 (1 yard)',
-      image: 'https://via.placeholder.com/100',
-    },
-    {
-        id: 'r3',
-        title: 'Ankara',
-        price: 'NGN 12,000 (1 yard)',
-        image: 'https://via.placeholder.com/100',
-      },
-      {
-        id: 'r4',
-        title: 'Ankara',
-        price: 'NGN 12,000 (1 yard)',
-        image: 'https://via.placeholder.com/100',
-      },
-  ];
-
-  
-
-  // Filter orders based on activeTab
-  const filteredOrders = orders.filter((order) => {
-    if (activeTab === 'Pending') return order.isPending;
-    if (activeTab === 'Completed') return order.isComplete;
-    if (activeTab === 'Cancelled') return order.isCancelled;
-    return true; // 'All' tab shows all orders
-  });
+  const [selectedTab, setSelectedTab] = useState("pending");
+const route = useRouter();
+  const renderOrderItem = ({ item }) => {
+    if (selectedTab === "pending") {
+      return (
+        <View style={[styles.orderContainer, {flexDirection:'column'}]}>
+          <Text style={styles.customerName}>{item.name}</Text>
+          <Text style={styles.service}>{item.service}</Text>
+          <View style={styles.buttonRow}>
+            <Link href='/(drawer)/(profile)/(order-history)/order_details' asChild>
+            <TouchableOpacity style={styles.acceptButton}>
+              <Text style={styles.buttonText}>Accept</Text>
+            </TouchableOpacity>
+            </Link>
+           
+            <TouchableOpacity style={styles.cancelButton}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.orderContainer}>
+         <View>
+          <Text style={styles.orderTitle}>{item.name}</Text>
+            <Text style={styles.clientText}>Client: {item.client}</Text>
+            <Text style={styles.dueDate}>Due: {item.dueDate}</Text>
+         </View>
+          <View style={styles.statusContainer}>
+            <TouchableOpacity style={[styles.statusButton, selectedTab === "inProgress" ? styles.inProgress : styles.completed]}>
+              <Text style={styles.statusText}>{selectedTab === "inProgress" ? "inProgress" : "Completed"}</Text>
+            </TouchableOpacity>
+            <Text style={{  }}>{item.progress}</Text>
+          </View>
+        </View>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
-        <View style={{ width:'100%' }}>
-
-        </View>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.replace("/(drawer)/(home)")} style={{ position:'absolute', left:0 }}>
-         <Ionicons name="arrow-back" size={24} color="black" />
+    <View style={{ flexDirection:'row' }}>
+    <Pressable onPress={()=>route.back()}>
+          <Ionicons name="arrow-back" size={24} color="black" style={styles.backIcon} />
+      </Pressable>
+    <Text style={styles.header}>Order History</Text>
+    </View>
+      <View style={styles.tabContainer}>
+        <TouchableOpacity style={[styles.tab, selectedTab === "pending" && styles.activeTab]} onPress={() => setSelectedTab("pending")}>
+          <Text style={[styles.tabText, selectedTab === "pending" && styles.activeTabText]}>Pending</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Order History</Text>
+        <TouchableOpacity style={[styles.tab, selectedTab === "inProgress" && styles.activeTab]} onPress={() => setSelectedTab("inProgress")}>
+          <Text style={[styles.tabText, selectedTab === "inProgress" && styles.activeTabText]}>In Progress</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.tab, selectedTab === "completed" && styles.activeTab]} onPress={() => setSelectedTab("completed")}>
+          <Text style={[styles.tabText, selectedTab === "completed" && styles.activeTabText]}>Completed</Text>
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.tabsContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            style={[
-              styles.tab,
-              activeTab === tab && { backgroundColor: COLORS.primary },
-            ]}
-            onPress={() => setActiveTab(tab)}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab && { color: COLORS.background },
-              ]}
-            >
-              {tab}
-            </Text>
+      {ordersData[selectedTab].length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>
+            {selectedTab === "pending"
+              ? "No Pending Order"
+              : selectedTab === "inProgress"
+              ? "No In Progress Order"
+              : "No Completed Order"} available
+          </Text>
+
+          <TouchableOpacity style={styles.returnButton} onPress={() => {/* Add navigation logic here */}}>
+            <Text style={styles.returnButtonText}>Return to homepage</Text>
           </TouchableOpacity>
-        ))}
-      </View>
-
-      <FlatList
-  data={filteredOrders}
-  keyExtractor={(item) => item.id}
-  renderItem={({ item }) => (
-    <TouchableOpacity
-      style={styles.orderItem}
-      onPress={() => {
-        if (item.isPending) {
-          router.push('/(drawer)/(profile)/(order-history)/pending');
-        } else if (item.isCancelled) {
-          router.push('/(drawer)/(profile)/(order-history)/cancelled');
-        } else if (item.isComplete) {
-          router.push('/(drawer)/(profile)/(order-history)/complete');
-        }
-      }}
-    >
-      <Image source={{ uri: item.image }} style={styles.orderImage} />
-      <View style={styles.orderDetails}>
-        <Text style={styles.orderTitle}>{item.title}</Text>
-        <Text style={styles.orderSubtitle}>{item.subtitle}</Text>
-        <Text style={styles.orderMeta}>
-          Color: {item.color} Size: {item.size}
-        </Text>
-        <Text style={styles.orderPrice}>{item.price}</Text>
-      </View>
-      <TouchableOpacity style={styles.actionButton}>
-        <Text style={styles.actionButtonText}>
-          {item.status[activeTab]}
-        </Text>
-      </TouchableOpacity>
-    </TouchableOpacity>
-  )}
-/>
-
-      <View style={styles.recommendedContainer}>
-        <Text style={styles.recommendedTitle}>Recommended for you</Text>
-        <TouchableOpacity>
-          <Text style={styles.seeMore}>See more {'>'}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.recommendedList}
-      >
-        {recommendedItems.map((item) => (
-          <View key={item.id} style={styles.recommendedItem}>
-            <Image source={{ uri: item.image }} style={styles.recommendedImage} />
-            <Text style={styles.recommendedItemTitle}>{item.title}</Text>
-            <Text style={styles.recommendedItemPrice}>{item.price}</Text>
-          </View>
-        ))}
-      </ScrollView>
+        </View>
+      ) : (
+        <FlatList data={ordersData[selectedTab]} renderItem={renderOrderItem} keyExtractor={(item) => item.id} />
+      )}
     </View>
   );
 };
@@ -377,123 +106,143 @@ const OrderHistory = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
-    padding: 10,
-
+    padding: 20,
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    fontSize: 22,
+    fontWeight: "bold",
     marginBottom: 10,
-    justifyContent:'center'
   },
-  backButton: {
-    fontSize: 18,
-    color: COLORS.primary,
-    marginRight: 10,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign:'center',
-    // backgroundColor:'red'
-  },
-  tabsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 10,
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
   },
   tab: {
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    backgroundColor: COLORS.borderGray,
+    borderRadius: 20,
+    backgroundColor: "#F5F5F5",
+  },
+  activeTab: {
+    backgroundColor: "#B87C4C",
   },
   tabText: {
-    fontSize: 14,
-    color: COLORS.textGray,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
   },
-  orderItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  activeTabText: {
+    color: "#fff",
+  },
+  orderContainer: {
+    padding: 15,
     marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: COLORS.borderGray,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
-  orderImage: {
-    width: 50,
-    height: 50,
+  customerName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  backIcon: {
     marginRight: 10,
   },
-  orderDetails: {
+  service: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 10,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  acceptButton: {
+    backgroundColor: "#B87C4C",
+    padding: 8,
+    borderRadius: 5,
     flex: 1,
+    marginRight: 5,
+  },
+  cancelButton: {
+    backgroundColor: "#fff",
+    padding: 8,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#B87C4C",
+    flex: 1,
+    marginLeft: 5,
+  },
+  buttonText: {
+    textAlign: "center",
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#000",
   },
   orderTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  orderSubtitle: {
+  clientText: {
     fontSize: 14,
-    color: COLORS.textGray,
+    color: "#555",
   },
-  orderMeta: {
-    fontSize: 12,
-    color: COLORS.textGray,
-  },
-  orderPrice: {
+  dueDate: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-  },
-  actionButton: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  actionButtonText: {
-    color: COLORS.background,
-    fontSize: 12,
-  },
-  recommendedContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20,
+    color: "#555",
     marginBottom: 10,
   },
-  recommendedTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  statusContainer: {
+    
+    alignItems: "flex-end",
+    gap:12,
+   
   },
-  seeMore: {
+  statusButton: {
+    padding: 8,
+    borderRadius: 5,
+    width: 120,
+    alignItems: "center",
+  },
+  inProgress: {
+    backgroundColor: "#B87C4C",
+  },
+  completed: {
+    backgroundColor: "green",
+  },
+  statusText: {
     fontSize: 14,
-    color: COLORS.primary,
+    fontWeight: "bold",
+    color: "#fff",
   },
-  recommendedList: {
-    flexDirection: 'row',
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  recommendedItem: {
-    width: 100,
-    marginRight: 10,
-    alignItems: 'center',
+  emptyText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
   },
-  recommendedImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 5,
+  returnButton: {
+    backgroundColor: "#B87C4C",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
-  recommendedItemTitle: {
-    fontSize: 14,
-    textAlign: 'center',
+  returnButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
-  recommendedItemPrice: {
-    fontSize: 12,
-    color: COLORS.primary,
-    textAlign: 'center',
-  },
+
 });
 
 export default OrderHistory;

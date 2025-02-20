@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { View, Text } from 'react-native'
 import React from 'react'
-import EditProfile from '~/components/profile/EditProfile'
-import PhoneNum from '~/components/profile/Phone_num'
+import Social from '~/components/profile/Social'
 
-export default function phone() {
+
+export default function social() {
   return (
     <View style={{ flex:1 }}>
-      <PhoneNum />
+      <Social />
     </View>
   )
 }

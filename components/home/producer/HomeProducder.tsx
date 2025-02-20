@@ -2,6 +2,8 @@
 import React from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
+import { COLORS } from '../Color';
+import { Link } from 'expo-router';
 
 const producers = [
     {
@@ -54,10 +56,10 @@ const ProducerHomepage = () => {
       
       {/* Logos */}
       <View style={styles.logoContainer}>
-        <Image source={{ uri: 'https://yourcdn.com/afrix.png' }} style={styles.logo} />
-        <Image source={{ uri: 'https://yourcdn.com/jumia.png' }} style={styles.logo} />
-        <Image source={{ uri: 'https://yourcdn.com/konga.png' }} style={styles.logo} />
-        <Image source={{ uri: 'https://yourcdn.com/kredi.png' }} style={styles.logo} />
+        <Image source={{ uri: 'https://businesspost.ng/wp-content/uploads/2021/03/Afriex.png' }} style={styles.logo} />
+        <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNffnWPSApstIU1oRVaCESJ4TL_HSYYf4jDg&s' }} style={styles.logo} />
+        <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgE4J460xXstegacqEkPDPJQDKFrt5rKWZLw&s' }} style={styles.logo} />
+        <Image source={{ uri: 'https://lendsqrstrapi.blob.core.windows.net/d7snkiyu0q9wnkuz8rtm/assets/full_logo_kredibank_6168193c5f.png' }} style={styles.logo} />
       </View>
 
       {/* Featured Producers */}
@@ -68,15 +70,32 @@ const ProducerHomepage = () => {
         estimatedItemSize={100}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.cardImage} />
+           
             <View>
-              <Text style={styles.cardTitle}>{item.name}</Text>
-              <Text style={styles.cardDescription}>{item.description}</Text>
+              <View style={{ flexDirection:'row' }}>
+              
+              
+              <View style={{ width:'60%' }}>
+                <Text style={styles.cardTitle}>{item.name}</Text>
+                <Text style={styles.cardDescription}>{item.description}</Text>
+              </View>
+              <Image source={require("../../../assets/ankara_prod.png")} style={[styles.cardImage, {width:'40%'}]} />
+              </View>
+
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.shopButton}><Text>Shop Now</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.contactButton}><Text>Contact Us</Text></TouchableOpacity>
+              <Link href={`/(producer)/category/1`} asChild>
+              <TouchableOpacity style={styles.shopButton}>
+              <Text style={styles.shopButtonText}>Shop Now</Text>
+              </TouchableOpacity>
+              </Link>
+
+               
+                <TouchableOpacity style={styles.contactButton}>
+                  <Text style={{ color:'#ffff' }}>Contact Us</Text>
+                  </TouchableOpacity>
               </View>
             </View>
+            <Image source={{ uri: item.image }} style={styles.cardImage} />
           </View>
         )}
       />
@@ -89,13 +108,25 @@ const ProducerHomepage = () => {
         estimatedItemSize={100}
         renderItem={({ item }) => (
           <View style={styles.highlightCard}>
-            <Image source={{ uri: item.image }} style={styles.highlightImage} />
-            
-            <Text style={styles.highlightTitle}>{item.title}</Text>
-            <Text style={styles.highlightDescription}>{item.description}</Text>
+            {/* <Image source={{ uri: item.image }} style={styles.highlightImage} /> */}
+           <View style={{ flexDirection:'row', width:'100%' }}>
+              <View style={{ flexWrap:'wrap', width:'60%'}}>
+                <Text style={styles.highlightTitle}>{item.title}</Text>
+                <View>
+                <Text style={styles.highlightDescription}>{item.description}</Text>
+              </View>
+              </View>
+              <Image source={require("../../../assets/viva_icon.png")} style={[styles.cardImage, {width:'40%'}]} />
+           </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.shopButton}><Text>Shop Now</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.contactButton}><Text>Contact Us</Text></TouchableOpacity>
+            <Link href={`/(producer)/category/1`} asChild>
+                <TouchableOpacity style={styles.shopButton}>
+                <Text>Shop Now</Text>
+                </TouchableOpacity>
+            </Link>
+              <TouchableOpacity style={styles.contactButton}>
+                <Text style={{ color:'#fff' }}>Contact Us</Text>
+                </TouchableOpacity>
             </View>
           </View>
         )}
@@ -109,15 +140,15 @@ const styles = StyleSheet.create({
   header: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
   searchBar: { backgroundColor: '#fff', padding: 10, borderRadius: 10, marginBottom: 10 },
   logoContainer: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 15 },
-  logo: { width: 50, height: 30, resizeMode: 'contain' },
+  logo: { width: 80, height: 50, resizeMode: 'contain' },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
   card: { flexDirection: 'row', backgroundColor: '#fff', padding: 10, borderRadius: 10, marginBottom: 10 },
-  cardImage: { width: 80, height: 80, borderRadius: 10, marginRight: 10 },
+  cardImage: { width: 100, height: 80, borderRadius: 10, marginRight: 10 },
   cardTitle: { fontSize: 16, fontWeight: 'bold' },
   cardDescription: { fontSize: 14, color: '#777', marginBottom: 5 },
   buttonContainer: { flexDirection: 'row', marginTop: 5 },
-  shopButton: { backgroundColor: '#f4a261', padding: 5, borderRadius: 5, marginRight: 5 },
-  contactButton: { backgroundColor: '#6d4c41', padding: 5, borderRadius: 5 },
+  shopButton: { borderWidth:1,borderColor: '#f4a261', padding: 10, borderRadius: 5, marginRight: 5, justifyContent:'center' },
+  contactButton: { backgroundColor: COLORS.ColorBrown, padding: 5, borderRadius: 5, justifyContent:'center' },
   highlightCard: { backgroundColor: '#fff', padding: 10, borderRadius: 10, marginBottom: 10 },
   highlightImage: { width: '100%', height: 120, borderRadius: 10 },
   highlightTitle: { fontSize: 16, fontWeight: 'bold', marginTop: 5 },

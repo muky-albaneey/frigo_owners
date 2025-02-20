@@ -142,7 +142,7 @@ const route = useRouter();
             </TouchableOpacity>
         </Link>
        
-       <Link href='/(drawer)/(product)/details_success' asChild>
+       <Link href='/(drawer)/(product)/success' asChild>
        <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>

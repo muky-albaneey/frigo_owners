@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { View, Text } from 'react-native'
 import React from 'react'
-import PhoneCode from '~/components/profile/Phone_code'
+import AddProduct from '~/components/product/AddProd'
 
-export default function phone_code() {
+export default function add_prod() {
   return (
     <View style={{ flex:1 }}>
-      <PhoneCode />
+      <AddProduct />
     </View>
   )
 }

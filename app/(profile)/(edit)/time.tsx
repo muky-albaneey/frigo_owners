@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { View, Text } from 'react-native'
 import React from 'react'
-import EditProfile from '~/components/profile/EditProfile'
+import EditWorkingHours from '~/components/profile/Time'
 
-export default function profile() {
+export default function time() {
   return (
     <View style={{ flex:1 }}>
-      <EditProfile />
+      <EditWorkingHours />
     </View>
-  )
+  ) 
 }

@@ -35,18 +35,20 @@ const route = useRouter();
         )}
       </TouchableOpacity>
       <Text style={styles.categoryName}>{item.name}</Text>
+     <Link href={`/(drawer)/(product)/add_product/${item.id}`} asChild>
       <TouchableOpacity style={styles.uploadButton} onPress={() => pickImage(item.id)}>
-        <Text style={styles.uploadButtonText}>Upload</Text>
-      </TouchableOpacity>
+          <Text style={styles.uploadButtonText}>Upload</Text>
+        </TouchableOpacity>
+     </Link>
     </View>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={()=>route.push('/(drawer)/(home)')}>
+        {/* <Pressable onPress={()=>route.push('/(drawer)/(home)')}>
           <Ionicons name="arrow-back" size={24} color="black" style={styles.backIcon} />
-        </Pressable>
+        </Pressable> */}
        
         <Text style={styles.headerTitle}>Add cover image</Text>
       </View>
@@ -87,12 +89,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 10,
+    justifyContent:'center',
   },
   backIcon: {
     marginRight: 10,
