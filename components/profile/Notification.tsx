@@ -36,7 +36,7 @@ const NotificationSettings = () => {
     passwordChanges: false,
   });
   const [emailSettings, setEmailSettings] = useState({ ...pushSettings });
-  const router = useRouter();
+  // const router = useRouter();
   const toggleSwitch = (key, type) => {
     if (type === 'push') {
       setPushSettings({ ...pushSettings, [key]: !pushSettings[key] });
@@ -49,13 +49,7 @@ const NotificationSettings = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-      <TouchableOpacity onPress={() => router.replace("/(drawer)/(profile)")}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Notifications</Text>
-      </View>
+     
 
       {/* Tabs */}
       <View style={styles.tabsContainer}>
@@ -238,21 +232,33 @@ const styles = StyleSheet.create({
   tabButton: {
     flex: 1,
     paddingVertical: 10,
-    backgroundColor: COLORS.background,
-    borderBottomWidth: 2,
-    borderBottomColor: COLORS.borderGray,
+    backgroundColor: '#C5A2892B',
+    // borderBottomWidth: 2,
+    // borderBottomColor: COLORS.borderGray,
     alignItems: 'center',
+    justifyContent: 'center',
+    // width:'100%' ,
+    height:40,
+    margin:1
+
   },
   activeTabButton: {
     borderBottomColor: COLORS.primary,
+    backgroundColor: COLORS.primary,
   },
   tabText: {
     fontSize: 16,
-    color: COLORS.textGray,
+  
   },
   activeTabText: {
-    color: COLORS.primary,
+    color: '#fff',
     fontWeight: 'bold',
+    backgroundColor:COLORS.primary,
+    // padding:10,
+   
+    borderRadius:10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scrollView: {
     flex: 1,

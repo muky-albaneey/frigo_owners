@@ -30,7 +30,7 @@ const ProfileScreen = () => {
     { id: '1', title: 'Personal Information', icon: <AntDesign name="user" size={20} color="#c59d82" />, route: "/(profile)/(edit)" },
     { id: '2', title: 'Sales dashboard', icon: <MaterialIcons name="dashboard" size={20} color="black" /> , route: "/(profile)/dashboard"},
     { id: '3', title: 'Add Product', icon: <Feather name="plus-square" size={20} color="black" />, route: "/(product)/" },
-    { id: '4', title: 'Wallet', icon: <FontAwesome5 name="wallet" size={20} color="black" />, route: "/(wallet)" },
+    // { id: '4', title: 'Wallet', icon: <FontAwesome5 name="wallet" size={20} color="black" />, route: "/(wallet)" },
     { id: '5', title: 'FAQs', icon: <Ionicons name="help-circle-outline" size={20} color="black" />, route: "/(profile)/support" },
     { id: '6', title: 'Notification', icon: <Ionicons name="notifications-outline" size={20} color="black" /> , route: "/(profile)/notification"},
     { id: '7', title: 'Switch Account', icon: <FontAwesome5 name="exchange-alt" size={20} color="black" />, route: "/(profile)/(edit)" },

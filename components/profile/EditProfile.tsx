@@ -8,7 +8,7 @@
   const OwnerProfile = () => {
     const router = useRouter();
 
-    const [profileImage, setProfileImage] = useState("https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg");
+    const [profileImage, setProfileImage] = useState("https://randomuser.me/api/portraits/women/44.jpg");
 
     const pickImage = async () => {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -66,7 +66,7 @@
                 <FontAwesome name="clock-o" size={20} color="black" />
                 <Text style={styles.rowText}>10:00 am - 6:00 pm</Text>
               </View>
-            <Link href='/(drawer)/(profile)/(edit)/time' asChild>
+            <Link href='/(profile)/(edit)/time' asChild>
             <TouchableOpacity>
                 <MaterialIcons name="edit" size={20} color="black" />
               </TouchableOpacity>
@@ -82,7 +82,7 @@
                 <MaterialIcons name="email" size={20} color="black" />
                 <Text style={styles.rowText}>mariokando@gmail.com</Text>
               </View>
-              <Link href='/(drawer)/(profile)/(edit)/address'>
+              <Link href='/(profile)/(edit)/address'>
               <MaterialIcons name="edit" size={20} color="black" />
               </Link>
             
@@ -92,7 +92,7 @@
                 <FontAwesome name="phone" size={20} color="black" />
                 <Text style={styles.rowText}>+1 (415) 505-0100</Text>
               </View>
-              <Link href='/(drawer)/(profile)/(edit)/address'>
+              <Link href='/(profile)/(edit)/address'>
               <MaterialIcons name="edit" size={20} color="black" />
               </Link>
               
@@ -107,7 +107,7 @@
                 <FontAwesome name="twitter" size={20} color="black" />
                 <Text style={styles.rowText}>@mariokando</Text>
               </View>
-              <Link href='/(drawer)/(profile)/(edit)/social'>
+              <Link href='/(profile)/(edit)/social'>
                 <MaterialIcons name="edit" size={20} color="black" />
               </Link>
             </View>
@@ -116,7 +116,7 @@
                 <FontAwesome name="instagram" size={20} color="black" />
                 <Text style={styles.rowText}>@mariokando</Text>
               </View>
-              <Link href='/(drawer)/(profile)/(edit)/social'>
+              <Link href='/(profile)/(edit)/social'>
                 <MaterialIcons name="edit" size={20} color="black" />
               </Link>
               

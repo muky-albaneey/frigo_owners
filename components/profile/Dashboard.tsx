@@ -45,7 +45,7 @@ const DashboardScreen = () => {
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity onPress={()=>route.back()}>
           <Text style={styles.backButton}>←</Text>
         </TouchableOpacity>
@@ -53,7 +53,7 @@ const DashboardScreen = () => {
         <TouchableOpacity>
           <Text style={styles.menuButton}>☰</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Search Bar */}
       <TextInput style={styles.searchBar} placeholder="Search here" />
@@ -194,7 +194,7 @@ const DashboardScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F8F8F8", padding: 20 },
+  container: { flex: 1, backgroundColor: "#F8F8F8", padding: 5 },
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 15 },
   backButton: { fontSize: 20 },
   headerTitle: { fontSize: 18, fontWeight: "bold" },

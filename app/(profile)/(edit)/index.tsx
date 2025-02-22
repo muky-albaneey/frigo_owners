@@ -6,7 +6,7 @@ import EditPersonal from '~/components/profile/EditProfile'
 
 export default function profile() {
   return (
-    <View style={{ flex:1 }}>
+    <View style={{ flex:1, paddingVertical:50 }}>
       <EditPersonal />
     </View>
   )

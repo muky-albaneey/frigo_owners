@@ -42,12 +42,12 @@ const route = useRouter()
 
   return (
     <View style={styles.container}>
-      <View style={{ justifyContent:'center', width:'100%', flexDirection:'row' }}>
+      {/* <View style={{ justifyContent:'center', width:'100%', flexDirection:'row' }}>
         <TouchableOpacity onPress={() => route.back()} style={{ position:'relative', left:-100 }}>
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
         <Text style={styles.header}>Edit Working Hours</Text>
-      </View>
+      </View> */}
       <FlashList
         data={workingDays}
         estimatedItemSize={70}

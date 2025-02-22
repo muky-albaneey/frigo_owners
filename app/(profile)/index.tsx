@@ -26,7 +26,7 @@ export default function Home() {
   const ProfileComponent = getProfile(); // Get the profile-based component
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       <Stack.Screen options={{ title: 'Afrigo', headerShown: false }} />
       {/* Check that ProfileComponent is being rendered correctly */}
       <ProfileComponent /> 

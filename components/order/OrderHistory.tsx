@@ -64,12 +64,12 @@ const route = useRouter();
 
   return (
     <View style={styles.container}>
-    <View style={{ flexDirection:'row' }}>
+    {/* <View style={{ flexDirection:'row' }}>
     <Pressable onPress={()=>route.back()}>
           <Ionicons name="arrow-back" size={24} color="black" style={styles.backIcon} />
       </Pressable>
     <Text style={styles.header}>Order History</Text>
-    </View>
+    </View> */}
       <View style={styles.tabContainer}>
         <TouchableOpacity style={[styles.tab, selectedTab === "pending" && styles.activeTab]} onPress={() => setSelectedTab("pending")}>
           <Text style={[styles.tabText, selectedTab === "pending" && styles.activeTabText]}>Pending</Text>

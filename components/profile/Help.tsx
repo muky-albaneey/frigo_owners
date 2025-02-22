@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { COLORS } from '../home/Color';
 
 export default function HelpSupport() {
   const [activeTab, setActiveTab] = useState('FAQ'); // 'FAQ' or 'Contact Us'
@@ -76,14 +77,19 @@ export default function HelpSupport() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity onPress={() => router.replace("/(drawer)/(profile)")}>
              <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Help & Support</Text>
-      </View>
-
+      </View> */}
+      <View style={{  paddingHorizontal:20,paddingVertical:10}}>
+          <Text style={{ fontWeight:800 }}>
+          How can we help?
+          </Text>
+        </View>
       <View style={styles.tabContainer}>
+        
         <TouchableOpacity
           style={[
             styles.tab,
@@ -133,22 +139,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: '#f9f9f9',
     paddingVertical: 10,
+    paddingHorizontal:10
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: 10,
+    height:40,
+    backgroundColor:COLORS.ColorLightBrown
   },
   activeTab: {
     borderBottomWidth: 3,
     borderBottomColor: '#964B00',
+    backgroundColor:COLORS.ColorBrown,
+    // color: '#fff',
   },
   tabText: {
     color: '#666',
     fontSize: 16,
+    fontWeight:800
   },
   activeTabText: {
-    color: '#964B00',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
