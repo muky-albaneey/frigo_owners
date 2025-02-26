@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Dimensions, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, MaterialIcons, Feather, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
@@ -12,8 +12,10 @@ const ProfileScreen = () => {
   const [profileImage, setProfileImage] = useState(
     'https://randomuser.me/api/portraits/women/44.jpg'
   );
+  const [headerImage, setHeaderImage] = useState('https://w0.peakpx.com/wallpaper/931/845/HD-wallpaper-flowers-purple-flowers-beautiful-nature.jpg');
 
-  const pickImage = async () => {
+  // Function to pick an image for profile
+  const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -26,6 +28,21 @@ const ProfileScreen = () => {
     }
   };
 
+  // Function to pick an image for header
+  const pickHeaderImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [16, 9], // Adjust aspect ratio for a header image
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setHeaderImage(result.assets[0].uri);
+    }
+  };
+
+  
   const menuItems = [
     { id: '1', title: 'Personal Information', icon: <AntDesign name="user" size={20} color="#c59d82" />, route: "/(profile)/(edit)" },
     { id: '2', title: 'Sales dashboard', icon: <MaterialIcons name="dashboard" size={20} color="black" /> , route: "/(profile)/dashboard"},
@@ -41,43 +58,44 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       {/* Background Image */}
-      <View style={styles.curvedBackground}>
-      <Image 
-          source={{ uri: 'https://w0.peakpx.com/wallpaper/931/845/HD-wallpaper-flowers-purple-flowers-beautiful-nature.jpg' }} style={styles.headerImage} />
+      <View style={{ flex:1,height:300 }}>
+      {/* <Image 
+          source={{ uri: 'https://w0.peakpx.com/wallpaper/931/845/HD-wallpaper-flowers-purple-flowers-beautiful-nature.jpg' }} 
+          style={styles.headerImage} /> */}
          
-      </View>
-    
-
-      {/* Profile Section */}
-      {/* <View style={styles.curvedBackground} /> */}
-
-      {/* Profile Section */}
-      <View style={styles.profileContainer}>
-      <Svg width="100%" height="100%" viewBox="0 0 200 100">
-        <Path
-          d="M 0 100 Q 100 -50 200 100 L 200 100 L 0 100 Z"
-          fill="#F4F4F4"
-        />
-      </Svg>
-       {/* <View style={{ position:'relative', top:-100 }}> */}
-       <TouchableOpacity onPress={pickImage} style={styles.profileImageWrapper}>
-          <Image source={{ uri: profileImage }} style={styles.profileImage} />
+         <ImageBackground source={{ uri: headerImage }} style={styles.headerImage}>
+          {/* Camera button for header image */}
+        <TouchableOpacity onPress={pickHeaderImage} style={styles.headerCameraIcon}>
+          <AntDesign name="camera" size={20} color="white" />
         </TouchableOpacity>
+        </ImageBackground>
 
-       <View style={{ position:'relative', top:-100}}>
-       <Text style={styles.name}>
-          Jane Doe <AntDesign name="checkcircle" size={14} color="black" />
-        </Text>
+      {/* Profile Section */}
+  
+      <View style={styles.profileContainer}>
+        <ImageBackground 
+        source={require("../../assets/profile_bg.png")} // Local background image from assets folder
+        style={styles.background}
+       >
+        <View style={{width:'100%', position:'relative', top:-65, justifyContent:'center', alignItems:'center' }}>
+          <TouchableOpacity onPress={pickProfileImage} style={styles.profileImageWrapper}>
+          <Image source={{ uri: profileImage }} style={styles.profileImage} />
+         </TouchableOpacity>
+          {/* Camera button for profile image */}
+          <TouchableOpacity onPress={pickProfileImage} style={styles.cameraIcon}>
+              <AntDesign name="camera" size={18} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.name}>
+            Jane Doe <AntDesign name="checkcircle" size={14} color="black" />
+          </Text>
         <Text style={styles.email}>janedoe@gmail.com. Lagos, Nigeria</Text>
-       </View>
-       </View>
-        
-       
-      {/* </View> */}
-
+      </View>
+    </ImageBackground>
+    </View> 
+     
+      </View>
       {/* Menu List */}
-      {/* <View style={{width:'100%', height:300, backgroundColor:'red' }}> */}
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginTop:-220 }}>
   <FlatList
     data={menuItems}
     keyExtractor={(item) => item.id}
@@ -118,48 +136,76 @@ const styles = StyleSheet.create({
     // borderBottomRightRadius: 20,
   },
   profileContainer: {
-    alignItems: 'center',
-    marginTop: -80,
-    backgroundColor: '#F4F4F4',
-    borderTopLeftRadius: '90%', 
-    borderTopRightRadius: '90%', 
-    height:200,
-    justifyContent:'center',
-    alignContent: 'center'
-    // borderBottomRightRadius: '53%', 
-    // borderBottomLeftRadius: '47%',    
+   flex: 1,
+    height:90,
+    // alignItems: 'center',
+    // // marginTop: -80,
+    // backgroundColor: '#F4F4F4',
+    // borderTopLeftRadius: '90%', 
+    // borderTopRightRadius: '90%', 
+    // // height:200,
+    // justifyContent:'center',
+   position:'relative',
+   top: -80,
+    // // borderBottomRightRadius: '53%', 
+    // // borderBottomLeftRadius: '47%',    
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover", // Ensures the image covers the whole view
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   profileImageWrapper: {
-    position: 'relative',
+    // position: 'relative',
     // borderWidth: 3,
     // borderColor: 'white',
     borderRadius: 50,
     overflow: 'hidden',
-    top:-140
+    // top:-140
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 130,
+    height: 130,
+    borderRadius: 150,
   },
   curvedBackground: {
-    width: width,
-    height: 200, // Adjust for proper background height
-    overflow: "hidden",
+    width: '100%',
+    height: 300, // Adjust for proper background height
+    // overflow: "hidden",
     alignItems: "center",
     justifyContent: "flex-end",
     backgroundColor: '#1f0303',
     // borderBottomLeftRadius: 50,
-    // borderBottomRightRadius: 50,
+    // borderBottomRightRadius: 50, 
   },
   cameraIcon: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 4,
-    elevation: 5,
+    bottom: 70,
+    right: 225,
+    backgroundColor: '#c59d82',
+    borderRadius: 15,
+    padding: 6,
+    elevation: 3, // Adds a shadow effect on Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  headerCameraIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#c59d82',
+    borderRadius: 15,
+    padding: 8,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   name: {
     fontSize: 18,
@@ -188,6 +234,29 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
+
+  // profileContainer: {
+  //   alignItems: "center",
+  //   backgroundColor: "rgba(255, 255, 255, 0.8)", // Optional: Adds a transparent white background for readability
+  //   padding: 20,
+  //   borderRadius: 10,
+  // },
+  // profileImageWrapper: {
+  //   marginBottom: 10,
+  // },
+  // profileImage: {
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 50,
+  // },
+  // name: {
+  //   fontSize: 18,
+  //   fontWeight: "bold",
+  // },
+  // email: {
+  //   fontSize: 14,
+  //   color: "gray",
+  // },
 });
 
 export default ProfileScreen;

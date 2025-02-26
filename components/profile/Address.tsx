@@ -8,14 +8,14 @@ export default function EditContacts() {
   return (
     <View style={styles.container}>
       {/* <TouchableOpacity onPress={() => route.replace('/(drawer)/(profile)/(edit)')} style={{ backgroundColor:'red',padding:10 }}> */}
-      <View style={{ flexDirection:'row',justifyContent:'space-between', alignItems:'center',width:'100%'}}>
+      {/* <View style={{ flexDirection:'row',justifyContent:'space-between', alignItems:'center',width:'100%'}}>
       <TouchableOpacity onPress={() => route.replace('/(drawer)/(profile)/(edit)')} style={{  }}>
         <Ionicons name="arrow-back" size={24} color="black"  />
       </TouchableOpacity>
       
       <Text style={styles.header}>Edit contacts</Text>
 
-      </View>
+      </View> */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Business phone number</Text>
         <TextInput style={styles.input} placeholder="Enter phone number" placeholderTextColor="#999" />

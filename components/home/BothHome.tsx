@@ -207,7 +207,7 @@ const BothHomePageUser = () => {
       </View>
 
       <View style={styles.bannerContainer}>
-        <FlatList
+        <FlashList
           data={banners}
           renderItem={renderBanner}
           horizontal
