@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import { Link } from "expo-router";
 import React, { useRef, useState } from "react";
 import { View, Text, Image, ScrollView, FlatList, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import AnimatedDotsCarousel from 'react-native-animated-dots-carousel';
@@ -62,10 +63,10 @@ export default function ProducerWelcomePage() {
       </View>
       
       <ScrollView
-  horizontal
-  showsHorizontalScrollIndicator={false}
-  contentContainerStyle={styles.categoryContainer}
->
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryContainer}
+      >
   {categories.map((item, index) => (
     <TouchableOpacity
       key={index}
@@ -98,13 +99,14 @@ export default function ProducerWelcomePage() {
           //   <Text style={styles.productName}>{item.name}</Text>
           //   <Text style={styles.productPrice}>{item.price}</Text>
           // </View>
-          <View style={{ padding: 8 }}>
+          <Link href='/(producer)/detail/1' asChild>
+              <TouchableOpacity>
+            <View style={{ padding: 8, backgroundColor:COLORS.ColorLightBrown, margin:1, borderRadius:12 }}>
             <Image source={item.image} style={styles.productImage} />
           <View style={{  width:'100%', flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
             <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-            <View style={{ padding:5, borderWidth:1, borderRadius:10, borderColor:COLORS.ColorHome}}>
-            <Entypo name="dots-three-vertical" size={24} color={COLORS.ColorBrown} />
-            {/* <MaterialIcons name="category" size={24} color={COLORS.ColorBrown} /> */}
+            <View style={{ padding:5, borderWidth:1, borderRadius:30, borderColor:COLORS.ColorHome}}>
+            <FontAwesome name="shopping-bag" size={15} color={COLORS.ColorHome} />          
             </View>
           </View>
           
@@ -113,6 +115,8 @@ export default function ProducerWelcomePage() {
             {/* <Text>{item?.description}</Text> */}
           </View>
         </View>
+          </TouchableOpacity>
+          </Link>
         )}
       />
 
@@ -217,18 +221,18 @@ const styles = StyleSheet.create(
     categoryHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
     categoryTitle: { fontSize: 16, fontWeight: "bold" },
     viewAll: { fontSize: 14, color: "#f2b705", fontWeight: "bold" },
-    categoryContainer: { flexDirection: "row", paddingVertical: 0, backgroundColor:'#E8D0B3' },
+    categoryContainer: { flexDirection: "row", paddingVertical: 0, backgroundColor:COLORS.ColorHome },
     categoryItem: { paddingVertical: 11, paddingHorizontal: 12, marginRight: 8 },
     categoryText: { fontSize: 14, color: "#333" },
     activeCategory: { backgroundColor: "#8B5A2B" },
     activeText: { color: "#fff" },
-    productCard: { flex: 1, margin: 8, backgroundColor: "#F9F9F9", borderRadius: 10, padding: 10, alignItems: "center", elevation: 3 },
-    productImage: { width: "100%", height: 100, resizeMode: "cover", borderRadius: 10, marginBottom: 8 },
+    productCard: { flex: 1, margin: 8, backgroundColor: "#E8D0B3", borderRadius: 10, padding: 10, alignItems: "center", elevation: 3 },
+    productImage: { width: "95%", height: 110, resizeMode: "cover", borderRadius: 10, marginBottom: 8 },
     productName: { fontSize: 14, fontWeight: "bold" },
     productPrice: { fontSize: 12, color: "#555" },
     image: {
-      width: 100,
-      height: 100,
+      width: 90,
+      height: 50,
       borderRadius: 15,
       marginHorizontal: 5,
     },

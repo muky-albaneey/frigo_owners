@@ -173,7 +173,44 @@ export default function Layout() {
       }}
              
              />
-    
+      <Stack.Screen name="detail/[id]" 
+        options={{
+        headerShown: true,
+        headerTitle: '', // Remove default title
+        header: () => (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              backgroundColor: "white", // Optional: Add background color
+              marginTop:50
+            }}
+          >
+            {/* Back Button */}
+            <TouchableOpacity onPress={() => router.back()} style={{ marginLeft: 10 }}>
+              <AntDesign name="leftcircleo" size={24} color="black" />
+            </TouchableOpacity>
+
+            {/* Title */}
+            {/* <Text style={{ fontSize: 20, fontWeight: "bold" }}>Reviews</Text> */}
+
+            {/* Icons */}
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity style={{ marginHorizontal: 8 }}>
+                <Text>🛒</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text>🔔</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ),
+      }}
+             
+             />
     </Stack>
   );
 }
