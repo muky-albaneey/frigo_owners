@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { COLORS } from '../Color';
@@ -46,14 +46,43 @@ const producers = [
       image: 'https://yourcdn.com/reddi2wear.png',
     },
   ];
-
+  const SearchBar = () => {
+    const [searchText, setSearchText] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
+  
+    return (
+      <View style={styles.searchContainer}>
+        {!isFocused && searchText === '' && (
+          <Image
+            source={require('../../../assets/search.png')} // Replace with your search icon path
+            style={styles.searchIcon}
+          />
+        )}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search native wear..."
+          placeholderTextColor="#aaa"
+          value={searchText}
+          onChangeText={setSearchText}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
+      </View>
+    );
+  };
 const ProducerHomepage = () => {
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
-      <Text style={styles.header}>Afrigora</Text>
-      <TextInput style={styles.searchBar} placeholder='Search native wear...' />
-      
+      <View style={{ width:'100%',flexDirection:'row', justifyContent:'space-between' }}>
+        <Text style={styles.header}>Afrigora</Text>
+        <Image
+            source={require('../../../assets/mingcute_contacts-4-fill.png')} // Replace with your search icon path
+            style={styles.profile}
+          />
+      </View>
+      {/* <TextInput style={styles.searchBar} placeholder='Search native wear...' /> */}
+      <SearchBar />
       {/* Logos */}
       <View style={styles.logoContainer}>
         <Image source={{ uri: 'https://businesspost.ng/wp-content/uploads/2021/03/Afriex.png' }} style={styles.logo} />
@@ -85,14 +114,16 @@ const ProducerHomepage = () => {
               <View style={styles.buttonContainer}>
               <Link href={`/(producer)/category/1`} asChild>
               <TouchableOpacity style={styles.shopButton}>
-              <Text style={styles.shopButtonText}>Shop Now</Text>
+              <Text style={{ color:COLORS.ColorBrown }}>Shop Now</Text>
               </TouchableOpacity>
               </Link>
 
-               
-                <TouchableOpacity style={styles.contactButton}>
-                  <Text style={{ color:'#ffff' }}>Contact Us</Text>
+              <Link href={`/(producer)/contact/1`} asChild>
+                  <TouchableOpacity style={styles.contactButton}>
+                    <Text style={{ color:'#ffff' }}>Contact Us</Text>
                   </TouchableOpacity>
+              </Link>
+                
               </View>
             </View>
             <Image source={{ uri: item.image }} style={styles.cardImage} />
@@ -138,7 +169,7 @@ const ProducerHomepage = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5', padding: 10 },
   header: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  searchBar: { backgroundColor: '#fff', padding: 10, borderRadius: 10, marginBottom: 10 },
+  // searchBar: { backgroundColor: '#fff', padding: 10, borderRadius: 10, marginBottom: 10 },
   logoContainer: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 15 },
   logo: { width: 80, height: 50, resizeMode: 'contain' },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
@@ -153,6 +184,33 @@ const styles = StyleSheet.create({
   highlightImage: { width: '100%', height: 120, borderRadius: 10 },
   highlightTitle: { fontSize: 16, fontWeight: 'bold', marginTop: 5 },
   highlightDescription: { fontSize: 14, color: '#777' },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f7f7f7',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#eee',
+  },
+  searchIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 8,
+    tintColor: '#000',
+  },
+  searchBar: {
+    flex: 1,
+    fontSize: 14,
+    color: '#333',
+  },
+  profile: {
+    width: 30,
+    height: 26,
+    marginRight: 8,
+    tintColor: '#000',
+  },
 });
 
 export default ProducerHomepage;

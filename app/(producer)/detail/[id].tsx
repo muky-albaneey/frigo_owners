@@ -24,15 +24,15 @@ const ProductDetailsScreen = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 15 }}>
       {/* Back Button & Wishlist */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 40 }}>
+      {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 40 }}>
         <TouchableOpacity>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Product Details</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}></Text>
         <TouchableOpacity>
           <AntDesign name="hearto" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Product Image */}
       <Image

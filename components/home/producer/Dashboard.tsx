@@ -19,12 +19,15 @@ import {
   XAxis,
   Grid,
 } from "react-native-svg-charts";
+import { G, Circle, Line } from 'react-native-svg';
 import * as shape from "d3-shape";
-import { Line, Svg } from "react-native-svg";
-import { Feather } from "@expo/vector-icons";
+// import { Line, Svg } from "react-native-svg";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { COLORS } from "../Color";
 
-const salesData = [5000, 15000, 3000, 12000, 8000, 18000];
+const salesData = [16000, 17000, 16000, 15000, 16000, 19000];
 
 // Custom Grid Component
 const CustomGrid = ({ y, ticks }: { y: (value: number) => number; ticks: number[] }) => (
@@ -56,14 +59,56 @@ const messageData = [
     avatar: "https://randomuser.me/api/portraits/women/2.jpg",
   },
 ];
+const barColors = [
+  "#6781b1",
+  "#e4c422"   ,  // First bar color
+  "#9ceb67"   ,   // Second bar color
+  "#7d5587" ,  // Third bar color
+  "#155060" ,              // Fourth bar (testing a raw color)
+  "#7a3c15",              // Fifth bar (testing another raw color)
+             // Fifth bar (testing another raw color)
+];
 
 const filterOptions = ["Yesterday", "Today", "Weekly", "Monthly", "Yearly"];
+
+// const formattedData = salesData.map((value, index) => ({
+//   value,
+//   svg: { fill: barColors[index] || "green" }, 
+//   key: `bar-${index}`, // Unique key
+// }));
+const formattedData = [
+  { label: "Mon", value: 1500, svg: { fill: "#2F5597" } },  // Blue
+  { label: "Tue", value: 6000, svg: { fill: "#E6A400" } },  // Yellow
+  { label: "Wed", value: 1300, svg: { fill: "#6AA84F" } },  // Green
+  { label: "Thu", value: 2500, svg: { fill: "#674EA7" } },  // Purple
+  { label: "Fri", value: 7500, svg: { fill: "#009688" } },  // Teal
+  { label: "Sat", value: 20000, svg: { fill: "#A52A2A" } }, // Brown
+];
+interface LineDecoratorProps {
+  x: (index: number) => number;
+  y: (value: number) => number;
+  data: number[];
+}
+
+// Fix: Explicitly type the decorator props
+const LineDecorator: React.FC<LineDecoratorProps> = ({ x, y, data }) => (
+  <G>
+    {data.map((value, index) => (
+      <Circle key={index} cx={x(index)} cy={y(value)} r={4} fill="green" />
+    ))}
+  </G>
+);
 
 const ProducerDashboard = () => {
   const [selectedFilter, setSelectedFilter] = useState("Weekly");
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+  const values = formattedData.map((item) => item.value);
+  const handleMenuPress = (menuItem: string) => {
+    setSelectedMenuItem(menuItem);
+  };
+  
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -129,46 +174,57 @@ const ProducerDashboard = () => {
         )}
 
         {/* Bar Chart */}
-        <View style={{ height: 200, flexDirection: "row" }}>
-          <YAxis
-            data={salesData}
-            style={{ marginBottom: 20 }}
-            contentInset={{ top: 10, bottom: 10 }}
-            svg={{ fontSize: 10, fill: "black" }}
-          />
-          <View style={{ flex: 1, marginLeft: 10 }}>
-            {/* <BarChart
-              style={{ height: 200 }}
-              data={salesData}
-              svg={{ fill: "#7c4d34" }}
-              contentInset={{ top: 10, bottom: 10 }}
-              spacingInner={0.2}
-            >
-              <Grid />
-            </BarChart> */}
-            <BarChart
-              style={{ height: 200 }}
-              data={salesData}
-              svg={{ fill: "#7c4d34" }}
-              contentInset={{ top: 10, bottom: 10 }}
-              spacingInner={0.2}
-            >
-              {/* Replace Grid with a Custom Grid */}
+        <View style={{ height: 220, flexDirection: "row", paddingHorizontal: 10 }}>
+      {/* Y-Axis for values */}
+      <YAxis
+        data={values}
+        style={{ marginBottom: 10 }}
+        contentInset={{ top: 10, bottom: 10 }}
+        svg={{ fontSize: 10, fill: "gray" }}
+      />
 
-             <CustomGrid y={(value) => value} ticks={[5000, 10000, 15000, 20000]} />
-            </BarChart>
+      <View style={{ flex: 1, marginLeft: 10 }}>
+        {/* Bar Chart with LineChart Overlay */}
+        <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+        {/* <LineChart
+        style={{ height: 200, width: 300, position: 'absolute' }}
+        data={values}
+        contentInset={{ top: 10, bottom: 10 }}
+        svg={{ stroke: 'brown', strokeWidth: 2 }}
+      >
+        {(props) => <LineDecorator {...props} />}
+      </LineChart> */}
+      <LineChart
+        style={{ height: 200, width: 300, position: 'absolute' }}
+        data={values}
+        contentInset={{ top: 10, bottom: 10 }}
+        svg={{ stroke: 'brown', strokeWidth: 2 }}
+      >
+        <LineDecorator />
+      </LineChart>
 
-            <XAxis
-              style={{ marginTop: 10 }}
-              data={salesData}
-              formatLabel={(value, index) =>
-                ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][index]
-              }
-              contentInset={{ left: 20, right: 20 }}
-              svg={{ fontSize: 10, fill: "black" }}
-            />
-          </View>
         </View>
+
+        <BarChart
+          style={{ height: 200, width: 320 }}
+          data={formattedData}
+          yAccessor={({ item }) => item.value}
+          contentInset={{ top: 10, bottom: 10 }}
+          spacingInner={0.5}
+          spacingOuter={0.3}
+        />
+
+        {/* X-Axis Labels */}
+        <XAxis
+          style={{ marginTop: 10 }}
+          data={formattedData}
+          formatLabel={(value, index) => formattedData[index]?.label}
+          contentInset={{ left: 20, right: 20 }}
+          svg={{ fontSize: 12, fill: "gray" }}
+        />
+      </View>
+    </View>
+
       </View>
 
       {/* Recent Messages */}
@@ -186,10 +242,14 @@ const ProducerDashboard = () => {
           renderItem={({ item }) => (
             <View style={styles.messageCard}>
               <Image source={{ uri: item.avatar }} style={styles.avatar} />
+             <View style={{width:'80%', flexDirection:'row', justifyContent:'space-between' }}>
               <View>
-                <Text style={styles.messageName}>{item.name}</Text>
-                <Text style={styles.messageText}>{item.message}</Text>
-              </View>
+                  <Text style={styles.messageName}>{item.name}</Text>
+                  <Text style={styles.messageText}>{item.message}</Text>
+                </View>
+                {/* <Feather name="message-square" size={24} color={COLORS.ColorBrown}/> */}
+                <MaterialIcons name="messenger" size={24} color={COLORS.ColorBrown} />
+             </View>
             </View>
           )}
         />
@@ -226,33 +286,74 @@ const ProducerDashboard = () => {
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
             >
-              <Feather name="x" size={24} color="black" />
+              <Feather name="x" size={18} color={COLORS.ColorWhite} />
             </TouchableOpacity>
             <View>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="user" size={20} color="black" />
-                <Text style={styles.menuText}>Personal Information</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="mail" size={20} color="black" />
-                <Text style={styles.menuText}>Message</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="bar-chart" size={20} color="black" />
-                <Text style={styles.menuText}>Sales Dashboard</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="credit-card" size={20} color="black" />
-                <Text style={styles.menuText}>Wallet</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="help-circle" size={20} color="black" />
-                <Text style={styles.menuText}>FAQs</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Feather name="log-out" size={20} color="black" />
-                <Text style={styles.menuText}>Logout</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "Personal Information" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("Personal Information")}
+>
+  <Feather name="user" size={20} color="black" />
+  <Text style={styles.menuText}>Personal Information</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "Message" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("Message")}
+>
+  <Feather name="mail" size={20} color="black" />
+  <Text style={styles.menuText}>Message</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "Sales Dashboard" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("Sales Dashboard")}
+>
+  <Feather name="bar-chart" size={20} color="black" />
+  <Text style={styles.menuText}>Sales Dashboard</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "Wallet" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("Wallet")}
+>
+  <Feather name="credit-card" size={20} color="black" />
+  <Text style={styles.menuText}>Wallet</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "FAQs" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("FAQs")}
+>
+  <Feather name="help-circle" size={20} color="black" />
+  <Text style={styles.menuText}>FAQs</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.menuItem,
+    selectedMenuItem === "Logout" && styles.selectedMenuItem,
+  ]}
+  onPress={() => handleMenuPress("Logout")}
+>
+  <Feather name="log-out" size={20} color="black" />
+  <Text style={styles.menuText}>Logout</Text>
+</TouchableOpacity>
             </View>
           </View>
         </View>
@@ -294,6 +395,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 10,
   },
+  selectedMenuItem: {
+    backgroundColor: "#d3a47e", // Change this to any color you prefer
+  },
+  
 //   welcomeText: { fontSize: 18, color: "#777" },
 //   brandName: { fontSize: 20, fontWeight: "bold" },
 //   brandLogo: { width: 40, height: 40 },
@@ -301,14 +406,14 @@ const styles = StyleSheet.create({
   salesContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 15,
+    marginVertical: 8,
   },
   salesBox: { flex: 1, alignItems: "center" },
   salesValue: { fontSize: 20, fontWeight: "bold" },
   salesLabel: { fontSize: 14, color: "#777" },
   earnings: { color: "green" },
   profit: { color: "red" },
-  chartContainer: { backgroundColor: "#fff", padding: 15, borderRadius: 10 },
+  chartContainer: { backgroundColor: "#FF8D4D0F", padding: 15, borderRadius: 10 },
   sectionTitle: { fontSize: 18, fontWeight: "bold" },
   filterText: { textAlign: "right", color: "#777" },
   dropdown: {
@@ -321,16 +426,16 @@ const styles = StyleSheet.create({
   },
   dropdownItem: { paddingVertical: 5 },
   dropdownActive: { backgroundColor: "#d3a47e" },
-  section: { marginTop: 20 },
+  section: { marginTop: 10 },
   messageCard: { flexDirection: "row", alignItems: "center", padding: 10 },
   avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
   progressBar: {
-    height: 8,
+    height: 10,
     backgroundColor: "#ddd",
     borderRadius: 5,
     marginVertical: 5,
   },
-  progressFill: { height: "100%", backgroundColor: "#d3a47e", borderRadius: 5 },
+  progressFill: { height: "100%", backgroundColor:COLORS.ColorBrown , borderRadius: 5,padding:6 },
   ratingText: { textAlign: "center", color: "#777" },
   uploadButton: {
     backgroundColor: "#7c4d34",
@@ -345,17 +450,33 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
+    position:'relative',
+    zIndex: 100,
+  //  height: 500,
+    // right:-50
   },
   modalContent: {
-    width: "80%",
+    width: "70%",
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
+    position:'absolute',
+    top: 160,
+    zIndex: 100,
+    height: 400,
+    right:-10
   },
   closeButton: {
     alignSelf: "flex-end",
     marginBottom: 10,
+    backgroundColor:COLORS.ColorBrown,
+    // padding: 10,
+    borderRadius: 35,
+    width: 28,
+    height: 27,
+    justifyContent: "center",
+    alignItems: "center",
   },
   menuItem: {
     flexDirection: "row",

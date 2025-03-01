@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 
@@ -94,6 +94,25 @@ const DrawerLayout = () => (
             
           <View style={{ backgroundColor: 'lightgray', padding: 8, borderRadius: 10 }}>
             <FontAwesome5 name="product-hunt" size={24} color={COLORS.ColorBrown} />
+        </View> 
+          ),
+        }}
+  />
+   <Drawer.Screen
+        name="(message)"
+        options={{
+          headerTitle: 'Message',
+          headerTitleStyle: {
+            color: COLORS.ColorBrown, // Change the title color to blue
+            fontSize: 18, // Optional: Adjust font size if needed
+          },
+          headerTintColor: COLORS.ColorBrown, 
+          drawerLabel: 'message',
+          drawerIcon: ({ size, color }) => (
+      
+          <View style={{ backgroundColor: 'lightgray', padding: 8, borderRadius: 10 }}>
+          
+            <MaterialCommunityIcons name="message" size={24} color={COLORS.ColorBrown} />
         </View> 
           ),
         }}

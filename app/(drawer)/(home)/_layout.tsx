@@ -26,8 +26,8 @@ const Tab = createBottomTabNavigator();
 export default function TabLayout() {
   const rotation = useSharedValue(0);
 
-  const status = 'both';
-const profile = 'owner';
+  const status = 'dealer';
+const profile = 'producer';
 
   const getHomeComponent = () => {
     switch (status) {
