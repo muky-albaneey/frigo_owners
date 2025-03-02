@@ -27,7 +27,7 @@ export default function TabLayout() {
   const rotation = useSharedValue(0);
 
   const status = 'dealer';
-const profile = 'producer';
+const profile = 'owner';
 
   const getHomeComponent = () => {
     switch (status) {

@@ -15,25 +15,52 @@ import { Audio } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { FlashList } from '@shopify/flash-list';
+import { useRouter } from 'expo-router';
+
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState([
-    { id: '1', type: 'text', content: 'Have a great working week!!', time: '09:25 AM' },
-    { id: '2', type: 'audio', content: null, time: '09:25 AM', sound: null, isPlaying: false },
-    { id: '3', type: 'image', content: 'https://via.placeholder.com/150', time: '09:25 AM' },
+  // const [messages, setMessages] = useState([
+  //   { id: '1', type: 'text', content: 'Have a great working week!!', time: '09:25 AM' },
+  //   { id: '2', type: 'audio', content: null, time: '09:25 AM', sound: null, isPlaying: false },
+  //   { id: '3', type: 'image', content: 'https://via.placeholder.com/150', time: '09:25 AM' },
+  // ]);
+  type MessageType = {
+    id: string;
+    type: string;
+    content: string | null;
+    sender: string;
+    time: string;
+    isPlaying?: boolean;
+    sound?: Audio.Sound | null;
+  };
+  const [messages, setMessages] = useState<MessageType[]>([
+    { id: '1', type: 'text', content: 'Hey!', time: '09:25 AM', sender: 'receiver' },
+    { id: '2', type: 'text', content: 'I’m good!', time: '09:26 AM', sender: 'sender' },
+    { id: '3', type: 'audio', content: null, time: '09:27 AM', sender: 'receiver', sound: null, isPlaying: false },
   ]);
+  
+  
   const [text, setText] = useState('');
-  const [recording, setRecording] = useState(null);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  
 
+  const route = useRouter()
+  // const sendMessage = (type, content) => {
+  //   setMessages((prev) => [
+  //     { id: Date.now().toString(), type, content, time: getTime() },
+  //     ...prev,
+  //   ]);
+  //   setText('');
+  // };
   const sendMessage = (type, content) => {
     setMessages((prev) => [
-      { id: Date.now().toString(), type, content, time: getTime() },
+      { id: Date.now().toString(), type, content, time: getTime(), sender: 'sender' },
       ...prev,
     ]);
     setText('');
   };
-
+  
   const getTime = () => {
     const now = new Date();
     const hours = now.getHours();
@@ -61,18 +88,57 @@ export default function ChatPage() {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
-      );
+  
+      console.log(Audio); // Debugging
+  
+      const { recording } = await Audio.Recording.createAsync({
+        android: {
+          extension: '.m4a',
+          outputFormat: Audio.AndroidOutputFormat.MPEG_4, // ✅ Corrected
+          audioEncoder: Audio.AndroidAudioEncoder.AAC, // ✅ Corrected
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.m4a',
+          outputFormat: Audio.IOSOutputFormat.MPEG4AAC, // ✅ Corrected
+          audioQuality: Audio.IOSAudioQuality.HIGH, // ✅ Corrected
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+        web: {
+          mimeType: 'audio/webm',
+          bitsPerSecond: 128000,
+        },
+      });
+  
       setRecording(recording);
       setIsRecording(true);
     } catch (err) {
       console.error('Failed to start recording', err);
     }
   };
+  
 
+  // const stopRecording = async () => {
+  //   try {
+  //     setIsRecording(false);
+  //     await recording.stopAndUnloadAsync();
+  //     const uri = recording.getURI();
+  //     sendMessage('audio', uri);
+  //     setRecording(null);
+  //   } catch (err) {
+  //     console.error('Failed to stop recording', err);
+  //   }
+  // };
   const stopRecording = async () => {
+    if (!recording) return;
+    console.log(recording)
     try {
       setIsRecording(false);
       await recording.stopAndUnloadAsync();
@@ -83,101 +149,191 @@ export default function ChatPage() {
       console.error('Failed to stop recording', err);
     }
   };
-
-  const playAudio = async (uri, id) => {
+  
+  const playAudio = async (uri: string, id: string) => {
     const newMessages = [...messages];
     const messageIndex = newMessages.findIndex((msg) => msg.id === id);
+  
+    if (messageIndex === -1) return; // Ensure valid index
+    
     const message = newMessages[messageIndex];
   
     try {
-      if (message.isPlaying) {
-        // Stop audio if it's currently playing
+      if (message.isPlaying && message.sound) {
+        console.log(12, message);
         await message.sound.stopAsync();
         await message.sound.unloadAsync();
         message.isPlaying = false;
         message.sound = null;
       } else {
-        // Start playback for the selected audio
         const { sound } = await Audio.Sound.createAsync({ uri });
-        message.sound = sound; // Attach the sound object
+        message.sound = sound;
         message.isPlaying = true;
   
-        // Start playback
         await sound.playAsync();
-  
-        // Track playback status updates
         sound.setOnPlaybackStatusUpdate(async (status) => {
-          console.log("Playback Status Update:", status); // Debug log
-  
-          if (status.didJustFinish) {
-            console.log("Playback Finished");
-  
-            // Cleanup and reset state
+          if ('didJustFinish' in status && status.didJustFinish) {
             message.isPlaying = false;
             await sound.unloadAsync();
             message.sound = null;
-  
-            // Update messages state
-            setMessages((prevMessages) => {
-              const updatedMessages = [...prevMessages];
-              updatedMessages[messageIndex] = { ...message, isPlaying: false };
-              return updatedMessages;
-            });
+            setMessages([...newMessages]);
           }
         });
       }
   
-      // Update the messages state to reflect the changes
       setMessages([...newMessages]);
     } catch (error) {
       console.error('Error in playAudio:', error);
     }
   };
   
+  
+
+  // const playAudio = async (uri, id) => {
+  //   const newMessages = [...messages];
+  //   const messageIndex = newMessages.findIndex((msg) => msg.id === id);
+  //   const message = newMessages[messageIndex];
+  
+  //   try {
+  //     if (message.isPlaying) {
+  //       // Stop audio if it's currently playing
+  //       await message.sound.stopAsync();
+  //       await message.sound.unloadAsync();
+  //       message.isPlaying = false;
+  //       message.sound = null;
+  //     } else {
+  //       // Start playback for the selected audio
+  //       const { sound } = await Audio.Sound.createAsync({ uri });
+  //       message.sound = sound; // Attach the sound object
+  //       message.isPlaying = true;
+  
+  //       // Start playback
+  //       await sound.playAsync();
+  
+  //       // Track playback status updates
+  //       sound.setOnPlaybackStatusUpdate(async (status) => {
+  //         console.log("Playback Status Update:", status); // Debug log
+  
+  //         if (status.didJustFinish) {
+  //           console.log("Playback Finished");
+  
+  //           // Cleanup and reset state
+  //           message.isPlaying = false;
+  //           await sound.unloadAsync();
+  //           message.sound = null;
+  
+  //           // Update messages state
+  //           setMessages((prevMessages) => {
+  //             const updatedMessages = [...prevMessages];
+  //             updatedMessages[messageIndex] = { ...message, isPlaying: false };
+  //             return updatedMessages;
+  //           });
+  //         }
+  //       });
+  //     }
+  
+  //     // Update the messages state to reflect the changes
+  //     setMessages([...newMessages]);
+  //   } catch (error) {
+  //     console.error('Error in playAudio:', error);
+  //   }
+  // };
+  
 
   const deleteMessage = (id) => {
     setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== id));
   };
   
+  // const renderItem = ({ item }) => {
+  //   return (
+  //     <View style={styles.messageContainer}>
+  //       {item.type === 'text' && (
+  //         <View style={styles.bubbleText}>
+  //           <Text style={styles.messageText}>{item.content}</Text>
+  //           <Text style={styles.time}>{item.time}</Text>
+  //         </View>
+  //       )}
+  //       {item.type === 'image' && (
+  //         <View style={styles.bubbleImage}>
+  //           <Image source={{ uri: item.content }} style={styles.image} />
+  //           <TouchableOpacity
+  //             style={styles.deleteButton}
+  //             onPress={() => deleteMessage(item.id)}
+  //           >
+  //             <MaterialIcons name="delete" size={24} color="red" />
+  //           </TouchableOpacity>
+  //           <Text style={styles.time}>{item.time}</Text>
+  //         </View>
+  //       )}
+  //       {item.type === 'audio' && (
+  //         <View style={styles.bubbleAudio}>
+  //           <TouchableOpacity
+  //             onPress={() => playAudio(item.content, item.id)} // Pass the message ID
+  //           >
+  //             <MaterialIcons
+  //               name={item.isPlaying ? "pause" : "play-arrow"}
+  //               size={24}
+  //               color="#ffffff"
+  //             />
+  //           </TouchableOpacity>
+  //           <Text style={styles.time}>{item.time}</Text>
+  //         </View>
+  //       )}
+  //     </View>
+  //   );
+  // };
+  
   const renderItem = ({ item }) => {
+    const isSender = item.sender === 'sender';
+  
     return (
-      <View style={styles.messageContainer}>
-        {item.type === 'text' && (
-          <View style={styles.bubbleText}>
+      <View
+        style={[
+          styles.messageContainer,
+          isSender ? styles.senderContainer : styles.receiverContainer,
+        ]}
+      >
+        <View
+          style={[
+            styles.bubble,
+            isSender ? styles.senderBubble : styles.receiverBubble,
+          ]}
+        >
+          {item.type === 'text' && (
             <Text style={styles.messageText}>{item.content}</Text>
-            <Text style={styles.time}>{item.time}</Text>
-          </View>
-        )}
-        {item.type === 'image' && (
-          <View style={styles.bubbleImage}>
-            <Image source={{ uri: item.content }} style={styles.image} />
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => deleteMessage(item.id)}
-            >
-              <MaterialIcons name="delete" size={24} color="red" />
-            </TouchableOpacity>
-            <Text style={styles.time}>{item.time}</Text>
-          </View>
-        )}
-        {item.type === 'audio' && (
-          <View style={styles.bubbleAudio}>
-            <TouchableOpacity
-              onPress={() => playAudio(item.content, item.id)} // Pass the message ID
-            >
-              <MaterialIcons
-                name={item.isPlaying ? "pause" : "play-arrow"}
-                size={24}
-                color="#ffffff"
-              />
-            </TouchableOpacity>
-            <Text style={styles.time}>{item.time}</Text>
-          </View>
-        )}
+          )}
+  
+          {item.type === 'image' && (
+            <>
+              <Image source={{ uri: item.content }} style={styles.image} />
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deleteMessage(item.id)}
+              >
+                <MaterialIcons name="delete" size={24} color="red" />
+              </TouchableOpacity>
+            </>
+          )}
+  
+          {item.type === 'audio' && (
+            <View style={styles.bubbleAudio}>
+              <TouchableOpacity
+                onPress={() => playAudio(item.content, item.id)} // Pass the message ID
+              >
+                <MaterialIcons
+                  name={item.isPlaying ? 'pause' : 'play-arrow'}
+                  size={24}
+                  color="#ffffff"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+  
+          <Text style={styles.time}>{item.time}</Text>
+        </View>
       </View>
     );
   };
-  
   
 
   return (
@@ -186,7 +342,13 @@ export default function ChatPage() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        <TouchableOpacity
+          onPress={() => route.back()}
+          // style={styles.backButton}
+        >
+           <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+       
         <Image
           source={{ uri: 'https://via.placeholder.com/40' }}
           style={styles.profilePicture}
@@ -307,20 +469,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     maxWidth: '80%',
   },
-  messageText: {
-    fontSize: 16,
-  },
+  // messageText: {
+  //   fontSize: 16,
+  // },
   time: {
     fontSize: 12,
     color: '#888',
     alignSelf: 'flex-end',
     marginTop: 5,
   },
-  image: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-  },
+  // image: {
+  //   width: 150,
+  //   height: 150,
+  //   borderRadius: 10,
+  // },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,5 +503,42 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
   },
-  
+  // messageContainer: {
+  //   flexDirection: 'row',
+  //   marginVertical: 5,
+  // },
+  senderContainer: {
+    alignSelf: 'flex-end', // Align messages to the right for sender
+  },
+  receiverContainer: {
+    alignSelf: 'flex-start', // Align messages to the left for receiver
+  },
+  bubble: {
+    padding: 10,
+    borderRadius: 10,
+    maxWidth: '75%',
+  },
+  senderBubble: {
+    backgroundColor: '#8B4513', // Blue for sender
+    borderTopRightRadius: 0,
+  },
+  receiverBubble: {
+    backgroundColor: '#E5E5EA', // Gray for receiver
+    borderTopLeftRadius: 0,
+  },
+  messageText: {
+    color: '#fff', // White text for sender messages
+    fontSize: 16,
+  },
+  // time: {
+  //   fontSize: 10,
+  //   alignSelf: 'flex-end',
+  //   marginTop: 5,
+  //   color: '#ddd',
+  // },
+  // image: {
+  //   width: 150,
+  //   height: 150,
+  //   borderRadius: 10,
+  // },
 });

@@ -118,10 +118,10 @@ const ProducerDashboard = () => {
         <Text style={styles.brandName}>Daviva Wears</Text>
       </View>
 
-      <View style={styles.headerRight}>
+      <View style={[styles.headerRight,]}>
         <Image
-          source={{ uri: "https://yourcdn.com/viva_logo.png" }}
-          style={styles.brandLogo}
+          source={{ uri: "https://companieslogo.com/img/orig/VEA.AX_BIG-8ae25479.png?t=1720244494" }}
+          style={[styles.brandLogo,  {marginRight:22}]}
         />
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Feather name="menu" size={24} color="black" />
@@ -185,7 +185,7 @@ const ProducerDashboard = () => {
 
       <View style={{ flex: 1, marginLeft: 10 }}>
         {/* Bar Chart with LineChart Overlay */}
-        <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+        <View style={{ position: "absolute", width: "100%", height: "100%" }}> 
         {/* <LineChart
         style={{ height: 200, width: 300, position: 'absolute' }}
         data={values}
@@ -232,7 +232,7 @@ const ProducerDashboard = () => {
        <View style={{ flexDirection:'row',  justifyContent:'space-between' }}>
        <Text style={styles.sectionTitle}>Recent Messages</Text>
        <Link href='/(producer)/home_message' asChild>
-              <Pressable><Text style={[styles.sectionTitle, {color:'#d3a47e'}]}>See all</Text></Pressable>
+              <Pressable><Text style={[styles.sectionTitle, {color:'#d3a47e'}]}>View all</Text></Pressable>
        </Link>
        </View>
         <FlashList
@@ -270,9 +270,11 @@ const ProducerDashboard = () => {
       </View>
 
       {/* Upload Button */}
-      <TouchableOpacity style={styles.uploadButton}>
-        <Text style={styles.uploadText}>Upload New Product</Text>
-      </TouchableOpacity>
+    <Link href={`/(drawer)/(product)`} asChild>
+        <TouchableOpacity style={styles.uploadButton}>
+          <Text style={styles.uploadText}>Upload New Product</Text>
+        </TouchableOpacity>
+    </Link>
 
       <Modal
         animationType="slide"
@@ -289,17 +291,21 @@ const ProducerDashboard = () => {
               <Feather name="x" size={18} color={COLORS.ColorWhite} />
             </TouchableOpacity>
             <View>
+            <Link href='/(profile)/(edit)' asChild style={{ width:240, flexDirection:'row' }}>
             <TouchableOpacity
-  style={[
-    styles.menuItem,
-    selectedMenuItem === "Personal Information" && styles.selectedMenuItem,
-  ]}
-  onPress={() => handleMenuPress("Personal Information")}
->
-  <Feather name="user" size={20} color="black" />
-  <Text style={styles.menuText}>Personal Information</Text>
-</TouchableOpacity>
+              style={[
+                styles.menuItem,
+                selectedMenuItem === "Personal Information" && styles.selectedMenuItem,
+              ]}
+              onPress={() => handleMenuPress("Personal Information")}
+            >
+                <Feather name="user" size={20} color="black" />
+              <Text style={styles.menuText}>Personal Information</Text>
+            </TouchableOpacity>
+            </Link>
+          
 
+<Link href='/(producer)/home_message' asChild style={{ width:240, flexDirection:'row' }}>
 <TouchableOpacity
   style={[
     styles.menuItem,
@@ -310,7 +316,10 @@ const ProducerDashboard = () => {
   <Feather name="mail" size={20} color="black" />
   <Text style={styles.menuText}>Message</Text>
 </TouchableOpacity>
+</Link>
 
+
+<Link href='/(profile)/dashboard' asChild style={{ width:240, flexDirection:'row' }}>
 <TouchableOpacity
   style={[
     styles.menuItem,
@@ -321,8 +330,10 @@ const ProducerDashboard = () => {
   <Feather name="bar-chart" size={20} color="black" />
   <Text style={styles.menuText}>Sales Dashboard</Text>
 </TouchableOpacity>
+</Link>
 
-<TouchableOpacity
+
+{/* <TouchableOpacity
   style={[
     styles.menuItem,
     selectedMenuItem === "Wallet" && styles.selectedMenuItem,
@@ -331,8 +342,8 @@ const ProducerDashboard = () => {
 >
   <Feather name="credit-card" size={20} color="black" />
   <Text style={styles.menuText}>Wallet</Text>
-</TouchableOpacity>
-
+</TouchableOpacity> */}
+<Link href='/(profile)/support' asChild style={{ width:240, flexDirection:'row' }}>
 <TouchableOpacity
   style={[
     styles.menuItem,
@@ -343,6 +354,8 @@ const ProducerDashboard = () => {
   <Feather name="help-circle" size={20} color="black" />
   <Text style={styles.menuText}>FAQs</Text>
 </TouchableOpacity>
+</Link>
+
 
 <TouchableOpacity
   style={[
@@ -368,7 +381,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 15,
     backgroundColor: "#fff",
   },
@@ -406,7 +419,7 @@ const styles = StyleSheet.create({
   salesContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 8,
+    marginVertical: 6,
   },
   salesBox: { flex: 1, alignItems: "center" },
   salesValue: { fontSize: 20, fontWeight: "bold" },
@@ -438,10 +451,10 @@ const styles = StyleSheet.create({
   progressFill: { height: "100%", backgroundColor:COLORS.ColorBrown , borderRadius: 5,padding:6 },
   ratingText: { textAlign: "center", color: "#777" },
   uploadButton: {
-    backgroundColor: "#7c4d34",
+    backgroundColor: COLORS.ColorBrown,
     padding: 12,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 10,
     alignItems: "center",
   },
   uploadText: { color: "#fff", fontWeight: "bold" },

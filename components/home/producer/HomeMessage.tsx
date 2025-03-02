@@ -72,7 +72,7 @@ const ProducersMessages = () => {
         keyExtractor={(item) => item.id}
         estimatedItemSize={60}
         renderItem={({ item }) => (
-         <Link href='' asChild>
+         <Link href='/(drawer)/(message)/chart_sec/1' asChild>
           <Pressable>
           <View style={styles.messageCard}>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
