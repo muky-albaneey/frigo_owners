@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   headerImage: {
     width: '100%',
-    height: 200,
+    height: 120,
     // borderBottomLeftRadius: 20,
     // borderBottomRightRadius: 20,
   },

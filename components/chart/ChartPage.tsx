@@ -187,101 +187,14 @@ export default function ChatPage() {
     }
   };
   
-  
 
-  // const playAudio = async (uri, id) => {
-  //   const newMessages = [...messages];
-  //   const messageIndex = newMessages.findIndex((msg) => msg.id === id);
-  //   const message = newMessages[messageIndex];
-  
-  //   try {
-  //     if (message.isPlaying) {
-  //       // Stop audio if it's currently playing
-  //       await message.sound.stopAsync();
-  //       await message.sound.unloadAsync();
-  //       message.isPlaying = false;
-  //       message.sound = null;
-  //     } else {
-  //       // Start playback for the selected audio
-  //       const { sound } = await Audio.Sound.createAsync({ uri });
-  //       message.sound = sound; // Attach the sound object
-  //       message.isPlaying = true;
-  
-  //       // Start playback
-  //       await sound.playAsync();
-  
-  //       // Track playback status updates
-  //       sound.setOnPlaybackStatusUpdate(async (status) => {
-  //         console.log("Playback Status Update:", status); // Debug log
-  
-  //         if (status.didJustFinish) {
-  //           console.log("Playback Finished");
-  
-  //           // Cleanup and reset state
-  //           message.isPlaying = false;
-  //           await sound.unloadAsync();
-  //           message.sound = null;
-  
-  //           // Update messages state
-  //           setMessages((prevMessages) => {
-  //             const updatedMessages = [...prevMessages];
-  //             updatedMessages[messageIndex] = { ...message, isPlaying: false };
-  //             return updatedMessages;
-  //           });
-  //         }
-  //       });
-  //     }
-  
-  //     // Update the messages state to reflect the changes
-  //     setMessages([...newMessages]);
-  //   } catch (error) {
-  //     console.error('Error in playAudio:', error);
-  //   }
-  // };
   
 
   const deleteMessage = (id) => {
     setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== id));
   };
   
-  // const renderItem = ({ item }) => {
-  //   return (
-  //     <View style={styles.messageContainer}>
-  //       {item.type === 'text' && (
-  //         <View style={styles.bubbleText}>
-  //           <Text style={styles.messageText}>{item.content}</Text>
-  //           <Text style={styles.time}>{item.time}</Text>
-  //         </View>
-  //       )}
-  //       {item.type === 'image' && (
-  //         <View style={styles.bubbleImage}>
-  //           <Image source={{ uri: item.content }} style={styles.image} />
-  //           <TouchableOpacity
-  //             style={styles.deleteButton}
-  //             onPress={() => deleteMessage(item.id)}
-  //           >
-  //             <MaterialIcons name="delete" size={24} color="red" />
-  //           </TouchableOpacity>
-  //           <Text style={styles.time}>{item.time}</Text>
-  //         </View>
-  //       )}
-  //       {item.type === 'audio' && (
-  //         <View style={styles.bubbleAudio}>
-  //           <TouchableOpacity
-  //             onPress={() => playAudio(item.content, item.id)} // Pass the message ID
-  //           >
-  //             <MaterialIcons
-  //               name={item.isPlaying ? "pause" : "play-arrow"}
-  //               size={24}
-  //               color="#ffffff"
-  //             />
-  //           </TouchableOpacity>
-  //           <Text style={styles.time}>{item.time}</Text>
-  //         </View>
-  //       )}
-  //     </View>
-  //   );
-  // };
+
   
   const renderItem = ({ item }) => {
     const isSender = item.sender === 'sender';
@@ -300,7 +213,7 @@ export default function ChatPage() {
           ]}
         >
           {item.type === 'text' && (
-            <Text style={styles.messageText}>{item.content}</Text>
+            <Text style={ isSender ?  styles.messageText : styles.messageTextRec }>{item.content}</Text>
           )}
   
           {item.type === 'image' && (
@@ -530,6 +443,8 @@ const styles = StyleSheet.create({
     color: '#fff', // White text for sender messages
     fontSize: 16,
   },
+  messageTextRec:{ fontSize: 16,},
+
   // time: {
   //   fontSize: 10,
   //   alignSelf: 'flex-end',

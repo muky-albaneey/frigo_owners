@@ -2,94 +2,122 @@
 import React, { useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { AntDesign, MaterialIcons, Feather } from "@expo/vector-icons";
+import useCartStore from "~/components/store/cart";
 
 const ProductDetailsScreen = () => {
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState(null);
-  
-  const colors = ["yellow", "blue", "red", "green", "brown", "purple"];
-  const images = [
-    "https://www.cartrollers.com/wp-content/uploads/2021/10/WhatsApp-Image-2021-09-23-at-9.40.26-PM.jpeg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlSk6mWGjCaOBvqGvdR1_2ocqe8LDXoN6WDw&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcMFk7sFZk6qhJOyxU0K6rpf6wCVekmMWwBQ&s",
-  ];
-  const similarProducts = [
-    "https://www.cartrollers.com/wp-content/uploads/2021/10/WhatsApp-Image-2021-09-23-at-9.40.26-PM.jpeg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlSk6mWGjCaOBvqGvdR1_2ocqe8LDXoN6WDw&s",
-    // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s",
-    // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcMFk7sFZk6qhJOyxU0K6rpf6wCVekmMWwBQ&s",
-  ];
+  // const [selectedColor, setSelectedColor] = useState(null);
 
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const { addToCart } = useCartStore();
+
+
+  const proData = 
+    {
+      id:1,
+      img : [
+        "https://www.cartrollers.com/wp-content/uploads/2021/10/WhatsApp-Image-2021-09-23-at-9.40.26-PM.jpeg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlSk6mWGjCaOBvqGvdR1_2ocqe8LDXoN6WDw&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcMFk7sFZk6qhJOyxU0K6rpf6wCVekmMWwBQ&s",
+      ],
+      similar : [
+        "https://www.cartrollers.com/wp-content/uploads/2021/10/WhatsApp-Image-2021-09-23-at-9.40.26-PM.jpeg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlSk6mWGjCaOBvqGvdR1_2ocqe8LDXoN6WDw&s",
+        // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s",
+        // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcMFk7sFZk6qhJOyxU0K6rpf6wCVekmMWwBQ&s",
+      ],
+      color:["yellow", "blue", "red", "green", "brown", "purple"],
+      initial_cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s",
+      price: 12000000,
+      deliveryTime:"8:00am - 10:00pm",
+      description:"Stylish damask material available in different yards/colors. Best quality. 6k per yard.",
+      address:"3b Idumota Lagos Island Nigeria",
+      title:" Luxury Silky Damask Material Men's Native Wear Fabrics",
+      inStock:false,
+      ratings:4.5, 
+    }
+
+  ;
+
+  const [selectedImage, setSelectedImage] = useState(proData.initial_cover);
+
+
+  const handleAddToCart = () => {
+    const product = {
+      id: "123",
+      name: "Luxury Silky Damask Material Men's Native Wear Fabrics",
+      price: 12000000,
+      quantity,
+      color: selectedColor,
+      image: selectedImage,
+    };
+  
+    // console.log("Adding product:", product);
+    
+    addToCart(product);
+    alert("Product added to cart!");
+  };
+  
+  
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 15 }}>
-      {/* Back Button & Wishlist */}
-      {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 40 }}>
-        <TouchableOpacity>
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}></Text>
-        <TouchableOpacity>
-          <AntDesign name="hearto" size={24} color="black" />
-        </TouchableOpacity>
-      </View> */}
-
-      {/* Product Image */}
-      <Image
-        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8sLabi5M7hOw3ZVyYZLuHA5g1Gqf1R6BZQ&s" }}
+    
+    <Image
+        source={{ uri: selectedImage }}
         style={{ width: "100%", height: 250, borderRadius: 10, marginTop: 15 }}
         resizeMode="cover"
       />
-
       {/* Image Thumbnails */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 10 }}>
-        {images.map((img, index) => (
-          <Image
-            key={index}
-            source={{ uri: img }}
-            style={{
-              width: 70,
-              height: 70,
-              borderRadius: 10,
-              marginRight: 10,
-              borderWidth: 1,
-              borderColor: "#ddd",
-            }}
-          />
+        {proData?.img?.map((img, index) => (
+           <TouchableOpacity key={index} onPress={() => setSelectedImage(img)}>
+           <Image
+             source={{ uri: img }}
+             style={{
+               width: 70,
+               height: 70,
+               borderRadius: 10,
+               marginRight: 10,
+               borderWidth: selectedImage === img ? 2 : 1,
+               borderColor: selectedImage === img ? "#8B5A2B" : "#ddd",
+             }}
+           />
+         </TouchableOpacity>
         ))}
       </ScrollView>
 
-      {/* Stock Status */}
+      {/* Stock Status color="green"*/}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-        <MaterialIcons name="check-circle" size={16} color="green" />
-        <Text style={{ color: "green", marginLeft: 5 }}>In stock</Text>
+        <MaterialIcons name="check-circle" size={16} color= {proData?.inStock ? 'green' : 'red'}  />
+        <Text style={[{ marginLeft: 5}, proData?.inStock ? {color: "green"} : {color: "red"}]}>{proData?.inStock ? 'In stock' : 'Out stock'}</Text>
       </View>
 
-      {/* Product Title & Rating */}
+      {/* Product Title & Rating { , }*/}
       <Text style={{ fontSize: 16, fontWeight: "bold", color: "#8B5A2B" }}>
-        Luxury Silky Damask Material Men's Native Wear Fabrics
+       {proData?.title}
       </Text>
       <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 5 }}>
         <Feather name="map-pin" size={14} color="gray" />
-        <Text style={{ color: "gray", marginLeft: 5 }}>3b Idumota Lagos Island Nigeria</Text>
+        <Text style={{ color: "gray", marginLeft: 5 }}>{proData?.address}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <AntDesign name="star" size={16} color="gold" />
-        <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "bold" }}>4.5</Text>
+        <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "bold" }}>{proData?.ratings}</Text>
       </View>
 
       {/* Delivery Info */}
       <Text style={{ color: "gray", marginVertical: 5 }}>Delivered worldwide</Text>
-      <Text style={{ color: "gray", fontSize: 12 }}>8:00am - 10:00pm</Text>
+      <Text style={{ color: "gray", fontSize: 12 }}>{proData?.deliveryTime}</Text>
 
       {/* Price */}
-      <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 10 }}>NGN 12,000,000</Text>
+      <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 10 }}>NGN {proData?.price}</Text>
       <Text style={{ color: "gray" }}>Multi-color fabric</Text>
 
       {/* Description */}
       <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}>Description</Text>
       <Text style={{ color: "gray" }}>
-        Stylish damask material available in different yards/colors. Best quality. 6k per yard.
+        {proData?.description}
       </Text>
 
       {/* Color Options */}
@@ -98,7 +126,7 @@ const ProductDetailsScreen = () => {
       <Text style={{ color: "gray", marginBottom: 5 }}>Available colors for this fabric:</Text>
       
       <View style={{ flexDirection: "row", marginBottom: 10 }}>
-        {colors.map((color, index) => (
+        {proData?.color.map((color, index) => (
           <TouchableOpacity key={index} onPress={() => setSelectedColor(color)}>
             <View
               style={{
@@ -118,7 +146,7 @@ const ProductDetailsScreen = () => {
 
       {/* Quantity Selector */}
       <Text style={{ fontSize: 16, fontWeight: "bold" }}>Quantity</Text>
-      <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}>
+      {proData?.inStock && (<View style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}>
         <TouchableOpacity
           onPress={() => setQuantity(Math.max(1, quantity - 1))}
           style={{
@@ -146,10 +174,11 @@ const ProductDetailsScreen = () => {
         >
           <AntDesign name="plus" size={20} color="white" />
         </TouchableOpacity>
-      </View>
+      </View>)}
 
       {/* Buy Now Button */}
-      <TouchableOpacity
+     {proData?.inStock && ( <TouchableOpacity
+        onPress={handleAddToCart}
         style={{
           backgroundColor: "#8B5A2B",
           paddingVertical: 15,
@@ -159,7 +188,7 @@ const ProductDetailsScreen = () => {
         }}
       >
         <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>Buy Now / Add to Cart</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>)}
 
       {/* Similar Products */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
@@ -170,7 +199,7 @@ const ProductDetailsScreen = () => {
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {similarProducts.map((img, index) => (
+        {proData.similar.map((img, index) => (
           <Image
             key={index}
             source={{ uri:img }}
